@@ -1,0 +1,22 @@
+<%- include ../partials/header %>
+
+<div class="container">
+<form action="/bugs/<%= bug._id %>/changestatus?_method=PUT" method="POST">
+
+    <div class="form-group">
+            <select class="form-control" name ="status" value="<%= bug.status %>">
+                   <option value="OPEN">OPEN</option>
+                   <option value="ASSIGNED">ASSIGNED</option>
+                   <option value="CLOSED">CLOSED</option>
+                   <option value="RESOLVED">RESOLVED</option>
+               </select>
+           </div>
+           <button class="btn btn-lg btn-info btn-block" type="submit">EDIT</button>
+           
+
+
+
+    </form>
+
+</div>
+    <%- include ../partials/footer %>

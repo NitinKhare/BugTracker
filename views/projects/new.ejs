@@ -1,0 +1,44 @@
+<%- include  ../partials/header %>
+
+<div class="container">
+    <div  class="row">
+        <div class= "text-center">
+    <h1>Create a Project</h1>
+    <p>Add Accurate Data</p>
+</div>
+<div style="width: 30%; margin: 10px auto">
+
+<form action="/projects" method="POST">
+    <div class="form-group">
+            <input class="form-control" type="text" name="pjname" placeholder="Enter The Project Name" required/>
+    </div>
+<div class="form-group">
+ <input class="form-control" type="text" name="techStack" placeholder="Enter The Technology" required/>
+</div>
+<div class="form-group">
+ <!-- <input class="form-control" type="text" rows="4" cols="50" name="description" placeholder="Enter the description" required> -->
+ <textarea class="form-control rounded-0" name="description"id="exampleFormControlTextarea2" placeholder="Enter The Project details" rows="7" required></textarea>
+
+</div>
+
+<div class="form-group">
+    <select class="form-control" name ="status">
+           <option value="PROPOSED">PROPOSED</option>
+           <option value="UNDER_DEVELOPMENT">UNDER DEVELOPMENT</option>
+           <option value="DEVELOPED">DEVELOPED</option>
+           <option value="DEPLOYED">DEPLOYED</option>
+       </select>
+   </div>
+
+ <button class="btn btn-lg btn-info btn-block">Submit</button>
+
+ <a class="btn btn-lg btn-default btn-block" href="/projects">View Existing Projects</a>
+
+</form>
+
+</div>
+</div>
+</div>
+
+
+<%- include  ../partials/footer %>

@@ -1,0 +1,94 @@
+<%- include  ../partials/header %>
+
+<style>
+            .open-bug { background-color: rgb(221, 70, 70); }
+            .closed-bug { background-color: rgb(99, 226, 173); }
+            .assigned-bug { background-color: rgb(250, 202, 114); }
+            .resolved-bug { background-color: rgb(70, 211, 70); }
+            
+
+</style>
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+
+<div class="container">
+    <header class="jumbotron">
+        <div class="container">
+            <h1>View All Projects</h1>
+
+            <p>
+                <a class="btn btn-primary btn-lg" href="/projects/new">Create a new Project</a>
+            </p>
+        </div>
+    </header>
+    <div class="row">
+        <div class="col-lg-12 col-centered">
+ 
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Project Name</th>
+                        <th>Status</th>
+                        <th>Date Created</th>
+                        <th>Technology</th>
+                        <th>Details</th> 
+                    </tr>
+                </thead>
+                
+                <tbody>
+                        <% var cl ="" %>
+                        <% Project.forEach(function(projects){ %>
+                            <% if (projects.status === "PROPOSED"){ %>
+                        <%  cl = "open-bug" %>
+                        <% } %>
+                        <% if (projects.status === "UNDER_DEVELOPMENT"){ %>
+                        <% cl = "assigned-bug"; %>
+                        <% } %>
+                        <% if (projects.status === "DEVELOPED"){ %>
+                        <% cl = "closed-bug"; %>
+                        <% } %>
+                        <% if (projects.status === "DEPLOYED"){ %>
+                        <% cl = "resolved-bug"; %>
+                        <% } %> 
+                        
+                               
+                        
+                        <tr class="<%= cl %>">
+                        
+                           
+                        <td ><a style="text-decoration:none; color : #000;" href="/"><%= projects.projectName%></a></td>
+
+                        <td><%= projects.status %></td> 
+
+                        <td><%= projects.dateAdded %></td>
+
+                        <td><a style="text-decoration:none; color : rgb(41, 29, 29);" href="/projects/<%= projects._id %>"><%= projects.techStack %></a></td>
+                        
+
+                            <% var text = projects.projectDetails %>
+                            <% var maxLength = 35 %>
+                            <% var trim_text = text.substr(0, maxLength); %>
+                            <% trim_text = trim_text.substr(0, Math.min(trim_text.length, trim_text.lastIndexOf(" ")))
+                            %>
+
+
+                        <td><a style="text-decoration:none; color : #000;" href="/projects/<%= projects._id %>"><%= trim_text %></a></td>
+
+                        
+                        
+                    </tr>
+             
+       
+                    <% }); %>
+                </tbody>
+            </table>
+       
+    </div>
+
+    </div>
+</div>
+
+<%- include  ../partials/footer %>
+

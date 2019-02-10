@@ -1,0 +1,57 @@
+<%- include  ../partials/header %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <p class="lead">BugTracker </p>
+            <div class="list-group-item">
+                <li class="list-group-item active"><a style="text-decoration:none; color : #fff;" href="#">EDIT</a></li>
+                <li class="list-group-item"><a style="text-decoration:none; color : rgb(0, 0, 0);" href="#">Change Status</a></li>
+                <li class="list-group-item">Info 3</li>
+
+            </div>
+        </div>
+        <div class="col-md-9">
+                <h1>Info About The message with ID
+                        <%= message.id %>
+                    </h1>
+                    <hr>
+                  
+                    <h3>Reported On :
+                        <%= message.dateOfContact %>
+                    </h3>
+                    <br>
+                    <h3>
+                            User Name : <%= message.name %>
+                         </h3>
+                   
+                    <br>
+
+                    <h3>Email :
+                        <%=message.email %>
+                    </h3>
+                    <br>
+                    <h3>
+                       Message Title : <%= message.subject %>
+                    </h3>
+                   
+                    <br>
+                    <h3>Description :
+                        <%= message.message %>
+                    </h3>
+                    
+                    <form action="/contacts/<%= message._id %>?_method=DELETE" method="POST">
+                        <button class="btn btn-danger pull-right" type="submit"> Delete</button></form>
+                    <hr>
+                    <hr>
+                    
+                    
+    
+                
+        </div>
+
+    </div>
+    
+
+</div>
+<%- include ../partials/footer %>

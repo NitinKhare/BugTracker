@@ -1,0 +1,44 @@
+<%- include  ../partials/header %>
+
+
+<div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <p class="lead">Bug Tracker</p>
+                <div class="list-group-item">
+                    <li class="list-group-item">Info 2</li>
+                    <li class="list-group-item">Info 3</li>
+    
+                </div>
+            </div>
+            <div class="col-md-9">
+                    <h1>Info About The Bug with ID
+                            <%= project._id %>
+                        </h1>
+                        <hr>
+                        <h3>
+                                Project Name : <%= project.projectName %>
+                             </h3>
+                             <br>
+                        <h3>
+                           Technology : <%= project.techStack %>
+                        </h3>
+                        <br>
+                        <h3>Status :
+                            <%=project.status %>
+                        </h3>
+                        <br>
+                        <h3>Reported On :
+                            <%= project.dateAdded %>
+                        </h3>
+                        <br>
+                        <h3>Details :
+                            <%= project.projectDetails %>
+                        </h3>
+
+                        <hr>
+                        <hr>
+                        
+
+
+<%- include  ../partials/footer %>

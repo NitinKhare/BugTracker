@@ -1,0 +1,43 @@
+
+<%- include  ../partials/header %>
+<div class="container">
+    <div  class="row">
+        <div class= "text-center">
+    <h1>Edit the Bug report for <%= bug.title %></h1>
+    <p>Be specific in Title and Description Text </p>
+</div>
+<div style="width: 30%; margin: 10px auto">
+
+<form action="/bugs/<%= bug._id %>?_method=PUT" method="POST">
+    <div class="form-group">
+            <input class="form-control" type="text" name="pjname" value="<%= bug.projectName %>" required/>
+    </div>
+<div class="form-group">
+ <input class="form-control" type="text" name="title" value="<%= bug.title %>" required/>
+</div>
+<div class="form-group">
+ <textarea class="form-control rounded-0" name="description" id="exampleFormControlTextarea2" value="<%= bug.description %>"  required><%= bug.description %></textarea>
+</div>
+<div class="form-group">
+ <select class="form-control" name ="status" value="<%= bug.status %>">
+        <option value="OPEN">OPEN</option>
+        <option value="ASSIGNED">ASSIGNED</option>
+        <option value="CLOSED">CLOSED</option>
+        <option value="RESOLVED">RESOLVED</option>
+    </select>
+</div>
+
+<button class="btn btn-lg btn-info btn-block" type="submit">EDIT</button>
+<button class="btn btn-lg btn-danger btn-block" formaction="/bugs/<%= bug._id %>?_method=DELETE" method="POST" type="submit"> Delete</button></form>
+</form>
+
+    
+<br>
+<a class="btn btn-lg btn-default btn-block" href="/bugs">View Existing Bugs</a>
+
+
+
+</div>
+</div>
+</div>
+<%- include ../partials/footer %>

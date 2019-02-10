@@ -1,0 +1,29 @@
+<%- include  ../partials/header %>
+<div class="container">
+    <div  class="row">
+        <div class= "text-center">
+    <h1>Submit a New Comment for <%= bug.title%> </h1>
+    <p>Be Specific and Direct </p>
+</div>
+<div style="width: 30%; margin: 10px auto">
+
+<form action="/bugs/<%= bug._id %>/comments" method="POST">
+<div class="form-group">
+ <input class="form-control" type="text" name="author" placeholder="Enter your name" required/>
+</div>
+<div class="form-group">
+ <!-- <input class="form-control" type="text" rows="4" cols="50" name="description" placeholder="Enter the description" required> -->
+ <textarea class="form-control rounded-0" name="comment"id="exampleFormControlTextarea2" placeholder="Enter the comment" rows="7" required></textarea>
+
+</div>
+
+ <button class="btn btn-lg btn-info btn-block">Submit</button>
+
+ <a class="btn btn-lg btn-default btn-block" href="/bugs">View Existing Bugs</a>
+
+</form>
+
+</div>
+</div>
+</div>
+<%- include  ../partials/header %>

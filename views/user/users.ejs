@@ -1,0 +1,38 @@
+<%- include  ../partials/header %>
+
+
+<div class="container">
+
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">User ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Username</th>
+            <th scope="col">E-MAIL</th>
+            <th scope="col">Contact Number</th>
+          </tr>
+        </thead>
+        <tbody>
+                <% user.forEach(function(user){ %>
+          <tr>
+
+                <td><%= user.id %></a></td>
+                <td><%= user.FullName %></td>
+                <td><%= user.username %></td>
+                <td><%= user.email %></td>
+                <td><%= user.mNumber %></a></td>
+               <!-- Field to be added to user schema
+                <td><%= user.dateCreated %></a></td> -->
+          
+          </tr>
+          <% }); %>
+    
+        </div>
+    </body>
+    </html>
+    
+    
+
+
+<%- include  ../partials/footer %>

@@ -1,0 +1,70 @@
+<%- include  ../partials/header %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <p class="lead">Bug Tracker</p>
+            <div class="list-group-item">
+                <li class="list-group-item active"><a style="text-decoration:none; color : #fff;" href="/bugs/<%= bug.id %>/edit">EDIT</a></li>
+                <li class="list-group-item"><a style="text-decoration:none; color : rgb(0, 0, 0);" href="/bugs/<%= bug.id %>/changeStatus">Change Status</a></li>
+                <li class="list-group-item">Info 3</li>
+
+            </div>
+        </div>
+        <div class="col-md-9">
+                <h1>Info About The Bug with ID
+                        <%= bug.id %>
+                    </h1>
+                    <hr>
+                    <h3>
+                            Project Name : <%= bug.projectName %>
+                         </h3>
+                         <br>
+                    <h3>
+                       Title : <%= bug.title %>
+                    </h3>
+                    <br>
+                    <h3>Status :
+                        <%=bug.status %>
+                    </h3>
+                    <br>
+                    <h3>Reported On :
+                        <%= bug.dateCreated %>
+                    </h3>
+                    <br>
+                    <h3>Description :
+                        <%= bug.description %>
+                    </h3>
+                    
+                    <form action="/bugs/<%= bug._id %>?_method=DELETE" method="POST">
+                        <button class="btn btn-danger pull-right" type="submit"> Delete</button></form>
+                    <hr>
+                    <hr>
+                    
+                    
+                        <div class="well">
+                        <div class="text-right">
+                                <a class="btn btn-success" href="/bugs/<%= bug.id %>/comments/new">Add a Comment</a>        
+                        </div>
+                        <hr>
+                        <% bug.comments.forEach(function(comment){ %>
+                            <div class="row">
+                                <div class="col-md-12">
+                                        <strong><%= comment.author %></strong>
+                                        <span class="pull-right">1 day ago</span>           
+                                       <p><%= comment.text %></p>
+                                      
+                                </div>
+                                <hr>
+                            </div>
+    
+                            <% }) %>
+                    </div>
+                
+        </div>
+
+    </div>
+    
+
+</div>
+<%- include ../partials/footer %>

@@ -1,0 +1,96 @@
+<%- include  ../partials/header %>
+
+<style>
+            .open-bug { background-color: rgb(221, 70, 70); }
+            .closed-bug { background-color: rgb(99, 226, 173); }
+            .assigned-bug { background-color: rgb(250, 202, 114); }
+            .resolved-bug { background-color: rgb(70, 211, 70); }
+            
+
+</style>
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+
+<div class="container">
+    <header class="jumbotron">
+        <div class="container">
+            <h1>View All Bugs</h1>
+
+            <p>
+                <a class="btn btn-primary btn-lg" href="/bugs/new">Submit a new Bug</a>
+            </p>
+        </div>
+    </header>
+    <div class="row">
+        <div class="col-lg-12 col-centered">
+ 
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Project</th>
+                        <th>Status</th>
+                        <th>Date Created</th>
+                        <th>Bug</th>
+                        <!--  -->
+                        <th>Description</th>
+                        <th>Date Solved</th>
+                    
+                    </tr>
+                </thead>
+                
+                <tbody>
+               
+                        <% bugs.forEach(function(bugs){ %>
+                            <% if (bugs.status === "OPEN"){ %>
+                        <% var cl = "open-bug" %>
+                        <% } %>
+                        <% if (bugs.status === "ASSIGNED"){ %>
+                        <% cl = "assigned-bug"; %>
+                        <% } %>
+                        <% if (bugs.status === "CLOSED"){ %>
+                        <% cl = "closed-bug"; %>
+                        <% } %>
+                        <% if (bugs.status === "RESOLVED"){ %>
+                        <% cl = "resolved-bug"; %>
+                        <% } %> 
+                        
+                               
+                        
+                        <tr class="<%= cl %>">
+                        
+                           
+                        <td ><a style="text-decoration:none; color : #000;" href="/projects"><%= bugs.projectName%></a></td>
+
+                        <td><a style="text-decoration:none; color : #000;" href="/bugs/<%= bugs.status.toLowerCase() %>/"><%= bugs.status %></a></td> 
+
+                        <td><a style="text-decoration:none; color : #000;" href="/bugs/<%= bugs._id %>"><%= bugs.dateCreated %></a></td>
+
+                        <td><a style="text-decoration:none; color : rgb(0, 0, 0);" href="/bugs/<%= bugs._id %>"><%= bugs.title %></a></td>
+
+                            
+                        <% var text = bugs.description %>
+                        <% var maxLength = 35 %>
+                        <% var trim_text = text.substr(0, maxLength); %>
+                        <% trim_text = trim_text.substr(0, Math.min(trim_text.length, trim_text.lastIndexOf(" ")))
+                        %>
+
+
+
+                        <td><a style="text-decoration:none; color : #000;" href="/bugs/<%= bugs._id %>"><%= trim_text %></a></td>
+                        <td><%= bugs.dateSolved %></td>
+                    </tr>
+             
+       
+                    <% }); %>
+                </tbody>
+            </table>
+       
+    </div>
+
+    </div>
+</div>
+
+<%- include  ../partials/footer %>
+
