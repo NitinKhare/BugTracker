@@ -8,8 +8,12 @@ var UserSchema = new mongoose.Schema({
     email:     String,
     username:  String,
     password:  String,
+    team: { type: mongoose.Schema.Types.ObjectId, ref: 'Team' },
+    isAdmin: Number,
+    isTeamMember : Number
 });
 
 UserSchema.plugin(passportLocalMongoose);
 UserSchema.index({"email": 1, "mNumber":1},{unique: true});
+
 module.exports = mongoose.model("User", UserSchema);

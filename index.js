@@ -8,14 +8,14 @@ var passport = require("passport");
 var LocalStrategy = require("passport-local");
 var User = require("./models/user");
 var methodOverride = require("method-override");
-var admin = require("./models/admin");
 var Project = require("./models/projects");
 var expressSession = require("express-session");
 var path = require("path");
 var Contact = require("./models/contact");
+var Team = require('./models/teams');
 
 
-mongoose.connect("mongodb://localhost/bts",{ useNewUrlParser: true });
+mongoose.connect("mongodb://localhost/btsCopy",{ useNewUrlParser: true });
 
 app.set("view engine", "ejs");
 
@@ -78,9 +78,57 @@ app.get("/docs", (req, res)=>{
     res.render("docs");
 });
 
+app.get("/createteam", (req, res)=>{
+    User.find({}, (err, user)=>{
+        if(err){
+            console.log(err);
+        } else{
+            res.render("user/createTeam",{User: user});
+        }
+    });
+});
+
+app.post("/createteam", (req, res)=>{
+    var teamName = req.body.teamname;
+    var dateCreated = todayDate();
+    var workAssigned = "NO";
+    var teamMembers= req.body.users;
+    //for(var i=0;i < teamMembers.length;i++){
+            
+    User.find({username: teamMembers[i]},(err, user)=>{
+        if(err){
+            res.redirect("/error");
+        }else{
+            Team.create({
+                teamName: teamName, dateCreated:dateCreated, workAssigned:workAssigned,
+         },(err, team)=>{
+            if(err){
+                res.redirect("/error");
+            }else{
+                 user.team = team;
+                 user.save();
+                 team.users.push(user);
+                 team.save(); 
+            }
+         });
+        }
+    });
+//}
+});
+
+
+
+
 
 app.get("/teams",(req,res)=>{
-    res.render("user/teams")
+    Team.find({}, (err, teams)=>{
+        if(err){
+            console.log(err);
+        } else{
+            res.render("user/teams",{teams: teams});
+        }
+    });    
+    
 })
 
 
@@ -396,10 +444,10 @@ app.get("/register",(req, res)=>{
 
 
 app.post("/register",(req, res)=>{
-    var fullName = "admin";
+    var no = 0;
 
     var newUser = new User({FullName:req.body.name,username: req.body.username,mNumber:req.body.number,
-    email:req.body.email,
+    email:req.body.email,isAdmin:no, isTeamMember:no
     });
     User.register(newUser, req.body.password, (err, user)=>{
         if(err){
