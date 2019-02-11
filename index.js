@@ -93,32 +93,23 @@ app.post("/createteam", (req, res)=>{
     var dateCreated = todayDate();
     var workAssigned = "NO";
     var teamMembers= req.body.users;
-    //for(var i=0;i < teamMembers.length;i++){
-            
-    User.find({username: teamMembers[i]},(err, user)=>{
+    Team.create({
+            teamName: teamName, dateCreated:dateCreated, workAssigned:workAssigned
+     },(err, team)=>{
         if(err){
             res.redirect("/error");
-        }else{
-            Team.create({
-                teamName: teamName, dateCreated:dateCreated, workAssigned:workAssigned,
-         },(err, team)=>{
-            if(err){
-                res.redirect("/error");
-            }else{
-                 user.team = team;
-                 user.save();
-                 team.users.push(user);
-                 team.save(); 
-            }
-         });
         }
-    });
-//}
+            for(var i=0;i < teamMembers.length;i++){
+                var teamMember = teamMembers[i];
+            User.findOneAndUpdate({username: teamMember},{isTeamMember: 1, team: team},(err, user)=>{
+                Team.findByIdAndUpdate( team._id,{ "$push": { users: user }},(err, res)=>{
+                    console.log("Added user to team");
+                });
+            });
+        }       
+    });    
+res.redirect("/teams");
 });
-
-
-
-
 
 app.get("/teams",(req,res)=>{
     Team.find({}, (err, teams)=>{
