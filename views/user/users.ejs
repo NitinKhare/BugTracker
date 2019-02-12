@@ -1,5 +1,8 @@
 <%- include  ../partials/header %>
-
+<style>
+.assigned { background-color: rgb(0, 255, 21); }
+.not-assigned { background-color: rgb(255, 0, 0); }  
+</style>
 
 <div class="container">
 
@@ -7,6 +10,7 @@
         <thead>
           <tr>
             <th scope="col">User ID</th>
+            <th scope="col">Team Assigned</th>
             <th scope="col">Name</th>
             <th scope="col">Username</th>
             <th scope="col">E-MAIL</th>
@@ -14,10 +18,18 @@
           </tr>
         </thead>
         <tbody>
+                
                 <% user.forEach(function(user){ %>
-          <tr>
+                  <% var team = "NO";%>
+                  <% var cls="not-assigned";%>
+                  <% if(user.isTeamMember === 1){%>
+                  <% team = "YES";%>
+                  <% cls = "assigned" }%>
+
+          <tr class="<%= cls %>">
 
                 <td><%= user.id %></a></td>
+                <td><%= team %></a></td>
                 <td><%= user.FullName %></td>
                 <td><%= user.username %></td>
                 <td><%= user.email %></td>

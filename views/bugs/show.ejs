@@ -44,20 +44,28 @@
                     
                         <div class="well">
                         <div class="text-right">
-                                <a class="btn btn-success" href="/bugs/<%= bug.id %>/comments/new">Add a Comment</a>        
+                                <form action="/bugs/<%= bug._id %>/comments" method="POST">
+                                    <input type="hidden" value="req">
+                                    <textarea class="form-control rounded-0" name="comment"id="exampleFormControlTextarea2" placeholder="Enter the comment" rows="7" required></textarea>
+                               <button class="btn btn-success" type="submit">Add a Comment</button>
+                                </form>
+                                        
                         </div>
                         <hr>
                         <% bug.comments.forEach(function(comment){ %>
+                            <div class="well">
                             <div class="row">
                                 <div class="col-md-12">
+                
                                         <strong><%= comment.author %></strong>
+                                   
                                         <span class="pull-right">1 day ago</span>           
                                        <p><%= comment.text %></p>
                                       
                                 </div>
                                 <hr>
                             </div>
-    
+                        </div>
                             <% }) %>
                     </div>
                 

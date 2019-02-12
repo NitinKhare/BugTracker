@@ -247,7 +247,7 @@ app.get("/bugs/:id/comments/new",isLoggedIn,function(req, res){
             res.redirect("/error"); 
             console.log(err);
         }else{
-            res.render("comments/new",{bug:bug});
+            res.render("comments/new",{bug:bug, user: req.user});
         }
     });
 });
@@ -321,6 +321,11 @@ app.post("/bugs/:id/comments",isLoggedIn,(req, res)=>{
             res.redirect("/error");
         }else{
             var author = req.body.author;
+            console.log(author);
+            if(author == undefined){
+                author = req.user.username;
+            }
+            console.log(author);
             var comment = req.body.comment;
             Comment.create({text:comment, author:author},(err, comment)=>{
                 if(err){
