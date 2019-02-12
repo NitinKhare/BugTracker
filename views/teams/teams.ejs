@@ -9,7 +9,7 @@
 <div class="container">
     <header class="jumbotron">
         <div class="container">
-                <h1>TEAM  INFO</h1>
+                <h1>TEAM  INFORMATION</h1>
 
                 <h3>For Information on all registered users go <a href="/users">here</a></h3>
 
@@ -42,12 +42,12 @@
                                 <% cls = "assigned"; %>
                                 <% } %>
                         <tr class = "<%= cls %>">
-                            <td><%= teams.id %></td>
+                            <td><a style="text-decoration:none; color : #000;" href="/teams/<%= teams._id %>"><%= teams.id %></a></td>
 
                            
-                        <td ><a style="text-decoration:none; color : #000;" href="/"><%= teams.teamName %></a></td>
+                        <td ><a style="text-decoration:none; color : #000;" href="/teams/<%= teams._id %>"><%= teams.teamName %></a></td>
 
-                        <td><%= teams.dateCreated %></td>
+                        <td><a style="text-decoration:none; color : #000;" href="/teams/<%= teams._id %>"><%= teams.dateCreated %></a></td>
 
                         <td><a style="text-decoration:none; color : rgb(41, 29, 29);" href="/teams/<%= teams._id %>"><%= teams.workAssigned %></a></td>
 

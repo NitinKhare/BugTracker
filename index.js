@@ -83,7 +83,7 @@ app.get("/createteam", (req, res)=>{
         if(err){
             console.log(err);
         } else{
-            res.render("user/createTeam",{User: user});
+            res.render("teams/createTeam",{User: user});
         }
     });
 });
@@ -116,7 +116,7 @@ app.get("/teams",(req,res)=>{
         if(err){
             console.log(err);
         } else{
-            res.render("user/teams",{teams: teams});
+            res.render("teams/teams",{teams: teams});
         }
     });    
     
