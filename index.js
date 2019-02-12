@@ -147,6 +147,29 @@ app.get("/users",isLoggedIn, (req, res)=>{
     
 });
 
+app.get("/users/delete", (req, res)=>{
+    User.find({}, (err, user)=>{
+        if(err){
+            console.log(err);
+        } else{
+            res.render("user/deleteUsers",{User:user});
+        }
+    });
+    
+});
+
+app.delete("/users/delete",isLoggedIn,(req, res)=>{
+    var userId = req.body.users;
+    User.findByIdAndRemove(userId, function(err){
+        if(err){
+ 
+        }else{
+         res.redirect("/users");
+        }
+    
+ });
+ });
+
 
 app.get("/bugs",isLoggedIn, (req, res)=>{
      

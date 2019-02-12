@@ -1,0 +1,34 @@
+<%- include ../partials/header %>
+<div class="no-background">
+<div class="container">
+        <div class="container">
+                <div  class="row">
+                    <div class= "text-center">
+                <h1>Delete a User</h1>
+                <p>The action is non reversible</p>
+            </div>
+            <div style="width: 30%; margin: 10px auto">
+        <form action="/users/delete?_method=DELETE" method="POST"">
+
+        <div class="form-group">
+                <select class="form-control" name ="users">
+                        <% User.forEach(function(user){ %>                            
+                        <option value="<%= user.id %>"><%= user.username %></option>
+                        <% }); %>
+                </select>
+                </div>
+            
+                <div class="form-group">
+                        
+                <button class="btn btn-lg btn-danger btn-block">Delete</button>
+            </div>
+
+</form>
+</div>
+</div>
+</div>
+
+<%- include ../partials/footer %>
+
+
+

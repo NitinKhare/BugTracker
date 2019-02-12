@@ -1,11 +1,5 @@
 <%- include ../partials/header %>
-<style>
-.no-background {
-    background-image: none;
-    background-color:#f1f1f1;
-}
 
-</style>
 
 <div class="no-background">
 <div class="container-fluid">
@@ -16,7 +10,7 @@
         <li class="active"><a href="#section1">ID : <%= teams.id %></a></li>
         <li><a href="#section2">Team Name : <strong><%= teams.teamName %></strong></a></li>
         <li><a href="#section3">Work Assigned:
-                <%=teams.workAssigned %></a></li>
+                <%= teams.workAssigned %></a></li>
         <li><a href="#section3"> Date Created : <%= teams.dateCreated %> </a></li>
       </ul><br>
     </div>
@@ -53,7 +47,10 @@
                           <% }); %>
                           </tbody>
                     
-                          </table>  
+                          </table>
+                          <% if(teams.workAssigned === "NO"){%>  
+                          <a href="#" class="btn btn-lg btn-success">Assign Work</a>
+                          <% } %>
     </div>
   </div>
 </div>
