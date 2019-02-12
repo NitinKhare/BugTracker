@@ -120,7 +120,20 @@ app.get("/teams",(req,res)=>{
         }
     });    
     
-})
+});
+
+app.get("/teams/:id",(req,res)=>{
+    User.find({},(err,user)=>{
+    Team.findById((req.params.id),(err, teams)=>{
+        if(err){
+           res.redirect("/error");
+        }else{
+            res.render("teams/show",{teams : teams, User : user});
+        }
+    });
+});
+});
+
 
 
 app.get("/users",isLoggedIn, (req, res)=>{

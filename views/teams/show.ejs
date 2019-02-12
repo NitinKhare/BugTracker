@@ -1,0 +1,63 @@
+<%- include ../partials/header %>
+<style>
+.no-background {
+    background-image: none;
+    background-color:#f1f1f1;
+}
+
+</style>
+
+
+<div class="container-fluid">
+  <div class="row content">
+    <div class="col-sm-3 sidenav">
+            <h4>Team information </h4>
+      <ul class="nav nav-pills nav-stacked">
+        <li class="active"><a href="#section1">ID : <%= teams.id %></a></li>
+        <li><a href="#section2">Team Name : <strong><%= teams.teamName %></strong></a></li>
+        <li><a href="#section3">Work Assigned:
+                <%=teams.workAssigned %></a></li>
+        <li><a href="#section3"> Date Created : <%= teams.dateCreated %> </a></li>
+      </ul><br>
+    </div>
+
+    <div class="col-sm-9">
+        <h4>Team Members</h4>
+            <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">User ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">E-MAIL</th>
+                        <th scope="col">Contact Number</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        
+            <% teams.users.forEach(teamMember =>{ %>    
+                                <% User.forEach(function(user){ %>
+                                  <% if(user.id == teamMember){%>
+                          <tr>
+                                <td><%= user.id %></a></td>
+                                <td><%= user.FullName %></td>
+                                <td><%= user.username %></td>
+                                <td><%= user.email %></td>
+                                <td><%= user.mNumber %></a></td>
+                               <!-- Field to be added to user schema
+                                <td><%= user.dateCreated %></a></td> -->
+                          
+                          </tr>
+                          <% } %>
+                          <% }); %>
+                          <% }); %>
+                          </tbody>
+                    
+                          </table>  
+    </div>
+  </div>
+</div>
+
+
+
+<%- include ../partials/footer %>
