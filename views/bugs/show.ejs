@@ -1,78 +1,98 @@
 <%- include  ../partials/header %>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-3">
-            <p class="lead">Bug Tracker</p>
-            <div class="list-group-item">
-                <li class="list-group-item active"><a style="text-decoration:none; color : #fff;" href="/bugs/<%= bug.id %>/edit">EDIT</a></li>
-                <li class="list-group-item"><a style="text-decoration:none; color : rgb(0, 0, 0);" href="/bugs/<%= bug.id %>/changeStatus">Change Status</a></li>
-                <li class="list-group-item">Info 3</li>
+<style>
+    /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+    /* .row.content {
+        height: 1500px
+    } */
+    .container-fluid{
+        background-color: #f1f1f1;
+    }
+    .custom{
+        height:100px;
+    }
+    /* Set gray background color and 100% height */
+    .sidenav {
+        background-color: #f1f1f1;
+        height: 100%;
+    }
+
+    /* Set black background color, white text and some padding */
+    footer {
+        background-color: #555;
+        color: white;
+        padding: 15px;
+    }
+
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+        .sidenav {
+            height: auto;
+            padding: 15px;
+        }
+
+        .row.content {
+            height: auto;
+        }
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row content">
+        <div class="col-sm-3 sidenav">
+            <h4>Bug Description</h4>
+            <ul class="nav nav-pills nav-stacked">
+                <li class="active"><a href="#section2"><%= bug.projectName %></a></li>
+                <li><a href="/bugs">View other bugs</a></li>
+                <li><a href="#section3">date</a></li>
+            </ul><br>
+            <form action="/bugs/<%= bug._id %>?_method=DELETE" method="POST">
+                <button class="btn btn-danger btn-lg" type="submit"> Delete</button></form>
+
+
+        </div>
+
+        <div class="col-sm-9">
+            <h4><small>BUG DETAILS</small></h4>
+            <hr>
+            <h2>Title :<%= bug.title %></h2>
+            <h5><span class="glyphicon glyphicon-time"></span> Bug Reported on <%= bug.dateCreated %></h5>
+            <h5><span class="label label-danger">BUG</span> <span class="label label-primary">Project</span></h5><br>
+            <h3>Description :</h3>
+            <p> <%= bug.description %></p>
+            <br><br>
+            <div class="custom">
 
             </div>
-        </div>
-        <div class="col-md-9">
-                <h1>Info About The Bug with ID
-                        <%= bug.id %>
-                    </h1>
-                    <hr>
-                    <h3>
-                            Project Name : <%= bug.projectName %>
-                         </h3>
-                         <br>
-                    <h3>
-                       Title : <%= bug.title %>
-                    </h3>
-                    <br>
-                    <h3>Status :
-                        <%=bug.status %>
-                    </h3>
-                    <br>
-                    <h3>Reported On :
-                        <%= bug.dateCreated %>
-                    </h3>
-                    <br>
-                    <h3>Description :
-                        <%= bug.description %>
-                    </h3>
-                    
-                    <form action="/bugs/<%= bug._id %>?_method=DELETE" method="POST">
-                        <button class="btn btn-danger pull-right" type="submit"> Delete</button></form>
-                    <hr>
-                    <hr>
-                    
-                    
-                        <div class="well">
-                        <div class="text-right">
-                                <form action="/bugs/<%= bug._id %>/comments" method="POST">
-                                    <input type="hidden" value="req">
-                                    <textarea class="form-control rounded-0" name="comment"id="exampleFormControlTextarea2" placeholder="Enter the comment" rows="7" required></textarea>
-                               <button class="btn btn-success" type="submit">Add a Comment</button>
-                                </form>
-                                        
+            <div class="well">
+                <div class="text-right">
+                    <form action="/bugs/<%= bug._id %>/comments" method="POST">
+                        <input type="hidden" value="req">
+                        <textarea class="form-control rounded-0" name="comment" id="exampleFormControlTextarea2"
+                            placeholder="Enter the comment" rows="4" required></textarea>
+                        <button class="btn btn-success" type="submit">Add a Comment</button>
+                    </form>
+
+                </div>
+                <hr>
+                
+                <div class="well">
+                        <% bug.comments.forEach(function(comment){ %>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <strong><%= comment.author %></strong>
+                            <span class="pull-right">1 day ago</span>
+                            <p><%= comment.text %></p>
+
                         </div>
                         <hr>
-                        <% bug.comments.forEach(function(comment){ %>
-                            <div class="well">
-                            <div class="row">
-                                <div class="col-md-12">
-                
-                                        <strong><%= comment.author %></strong>
-                                   
-                                        <span class="pull-right">1 day ago</span>           
-                                       <p><%= comment.text %></p>
-                                      
-                                </div>
-                                <hr>
-                            </div>
-                        </div>
-                            <% }) %>
                     </div>
-                
+                    <% }) %>
+                </div>
+               
+            </div>
         </div>
-
     </div>
-    
-
 </div>
+
 <%- include ../partials/footer %>
