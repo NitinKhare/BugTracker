@@ -51,9 +51,11 @@
                           </tbody>
                     
                           </table>
+                          
                           <% if(teams.workAssigned === "NO"){%>
                             
-                          <a href="#" class="btn btn-lg btn-success">Assign Work</a>
+                          <a href="/teams/<%= teams.id %>/assignwork" class="btn btn-lg btn-success">Assign Work</a>
+                          </form>
                           <% } %>
                         
                       

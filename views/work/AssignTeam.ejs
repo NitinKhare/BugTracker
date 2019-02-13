@@ -1,0 +1,37 @@
+<%- include  ../partials/header %>
+<div class="container">
+    <div  class="row">
+        <div class= "text-center">
+    <h1>Assign Work</h1>
+</div>
+<div style="width: 30%; margin: 10px auto">
+
+<form action="/teams/<%= team.id %>/assignwork" method="POST">
+    <div class="form-group">
+            <select class="form-control" name ="pjname">
+                    <% Project.forEach(function(projects){ %>
+                    <option value="<%= projects.projectName %>"><%= projects.projectName %></option>   
+                    <% }); %>
+            </select>
+    </div>
+    
+
+<div class="form-group">
+    <label for="name" class = "form-check-label">Enter a due date</label>
+     
+    <input type="date" class="form-control" name="dueDate">
+</div>
+
+<div class="form-group">
+    <textarea class="form-control rounded-0" name="description"id="exampleFormControlTextarea2" placeholder="Enter any description" rows="3"></textarea>
+   </div>
+
+ <button class="btn btn-lg btn-info btn-block">Submit</button>
+
+
+</form>
+
+</div>
+</div>
+</div>
+<%- include ../partials/footer %>

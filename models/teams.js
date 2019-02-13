@@ -4,6 +4,7 @@ var TeamSchema = new mongoose.Schema({
     teamName  : String,
     dateCreated: String,
     workAssigned: String,
+    projectWork: { type: mongoose.Schema.Types.ObjectId, ref: 'Project' },
     users : [ { type: mongoose.Schema.Types.ObjectId, ref: 'User' } ]
   });
 

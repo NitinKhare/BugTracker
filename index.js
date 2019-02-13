@@ -7,6 +7,7 @@ var Comment = require("./models/comment");
 var passport = require("passport");
 var LocalStrategy = require("passport-local");
 var User = require("./models/user");
+var Work = require("./models/work");
 var methodOverride = require("method-override");
 var Project = require("./models/projects");
 var expressSession = require("express-session");
@@ -140,11 +141,9 @@ app.delete("/teams/:id/delete", (req, res)=>{
     Team.findById(id, (err, team)=>{
         team.users.forEach(function(userId){
                 User.findByIdAndUpdate( userId,{ "$set": { isTeamMember: 0 , team: null}},(err, res)=>{
-            });
-           
+            });           
         });
     });
-
     Team.findByIdAndRemove(id, function(err){
         if(err){
             res.redirect("/error");
@@ -153,6 +152,37 @@ app.delete("/teams/:id/delete", (req, res)=>{
         }
     });
 });
+
+
+app.get("/teams/:id/assignwork",(req,res)=>{
+    Team.findById(req.params.id, (err, team)=>{
+        if(err){
+            res.redirect("/error");
+        }else{
+            Project.find({}, (err, project)=>{
+            res.render("work/AssignTeam",{team:team, Project:project});
+        });
+    }
+    });
+});
+
+app.post("/teams/:id/assignwork",(req,res)=>{
+    var teamID = req.params.id;
+    Work.create({
+        team:teamID,dateCreated:todayDate(),dueDate:""+req.body.dueDate,
+    },(err, work)=>{
+        if(err){
+            console.log(err);
+            res.redirect("/error")
+        }else{
+           
+            Team.findByIdAndUpdate(teamID,{ "$set": { workAssigned: "YES"}},(err, res)=>{});
+            res.redirect("/teams/"+teamID);
+        }
+    })
+
+});
+
 
 
 app.get("/users",isLoggedIn, (req, res)=>{
