@@ -13,6 +13,9 @@
                 <%= teams.workAssigned %></a></li>
         <li><a href="#section3"> Date Created : <%= teams.dateCreated %> </a></li>
       </ul><br>
+      <form action="/teams/<%= teams.id %>/delete?_method=DELETE" method="POST">
+        <button class="btn btn-lg btn-danger" type="submit">Delete Team</button>
+      </form>
     </div>
 
     <div class="col-sm-9">
@@ -48,9 +51,12 @@
                           </tbody>
                     
                           </table>
-                          <% if(teams.workAssigned === "NO"){%>  
+                          <% if(teams.workAssigned === "NO"){%>
+                            
                           <a href="#" class="btn btn-lg btn-success">Assign Work</a>
                           <% } %>
+                        
+                      
     </div>
   </div>
 </div>

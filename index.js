@@ -103,7 +103,7 @@ app.post("/createteam", (req, res)=>{
                 var teamMember = teamMembers[i];
             User.findOneAndUpdate({username: teamMember},{isTeamMember: 1, team: team},(err, user)=>{
                 Team.findByIdAndUpdate( team._id,{ "$push": { users: user }},(err, res)=>{
-                    console.log("Added user to team");
+                    
                 });
             });
         }       
@@ -134,6 +134,25 @@ app.get("/teams/:id",(req,res)=>{
 });
 });
 
+
+app.delete("/teams/:id/delete", (req, res)=>{
+    var id = req.params.id;
+    Team.findById(id, (err, team)=>{
+        team.users.forEach(function(userId){
+                User.findByIdAndUpdate( userId,{ "$set": { isTeamMember: 0 , team: null}},(err, res)=>{
+            });
+           
+        });
+    });
+
+    Team.findByIdAndRemove(id, function(err){
+        if(err){
+            res.redirect("/error");
+        }else{
+            res.redirect("/teams");
+        }
+    });
+});
 
 
 app.get("/users",isLoggedIn, (req, res)=>{
