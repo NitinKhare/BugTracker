@@ -611,7 +611,7 @@ app.get("/projects/:id",isLoggedIn, (req, res)=>{
     var id = req.params.id;
     Project.findById({_id:id},(err, project)=>{
         if(err){
-            console.log(err);
+         res.redirect("/error");
         }else{
             res.render("projects/show",{project : project});
         }

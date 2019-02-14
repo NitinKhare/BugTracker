@@ -1,44 +1,67 @@
 <%- include  ../partials/header %>
 
-
-<div class="container">
-        <div class="row">
-            <div class="col-md-3">
-                <p class="lead">Bug Tracker</p>
-                <div class="list-group-item">
-                    <li class="list-group-item">Info 2</li>
-                    <li class="list-group-item">Info 3</li>
+  <style>
+    /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+    /* .row.content {height: 1500px} */
     
-                </div>
-            </div>
-            <div class="col-md-9">
-                    <h1>Info About The Bug with ID
-                            <%= project._id %>
-                        </h1>
-                        <hr>
-                        <h3>
-                                Project Name : <%= project.projectName %>
-                             </h3>
-                             <br>
-                        <h3>
-                           Technology : <%= project.techStack %>
-                        </h3>
-                        <br>
-                        <h3>Status :
-                            <%=project.status %>
-                        </h3>
-                        <br>
-                        <h3>Reported On :
-                            <%= project.dateAdded %>
-                        </h3>
-                        <br>
-                        <h3>Details :
-                            <%= project.projectDetails %>
-                        </h3>
+    /* Set gray background color and 100% height */
+    .sidenav {
+      background-color: #f1f1f1;
+      height: 100%;
+    }
+    
+    /* Set black background color, white text and some padding */
+    footer {
+      background-color: #555;
+      color: white;
+      padding: 15px;
+    }
+    
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {height: auto;} 
+    }
+    .bck{
+        background-color: #f1f1f1;
+    }
+  </style>
 
-                        <hr>
-                        <hr>
-                        
 
+<div class="container-fluid">
+  <div class="row content">
+    <div class="col-sm-3 sidenav">
+      <h4>Projects</h4>
+      <ul class="nav nav-pills nav-stacked">
+        <li class="active"><a href="/">Home</a></li>
+        <li><a href="/projects">Other Project</a></li>
+        <li><a href="/users"> Users</a></li>
+        <li><a href="/contacts">Contacts</a></li>
+      </ul><br>
+    </div>
+
+    <div class="col-sm-9 bck">
+      <h4><small>Project information</small></h4>
+      <hr>
+      <h2><%= project.projectName %></h2>
+      <h5><span class="glyphicon glyphicon-time"></span> Added on, <%= project.dateAdded %>.</h5>
+      <h5><span class="label label-info">Project</span> <span class="label label-primary">Important</span></h5><br>
+      <h3 >
+        Technology : <%= project.techStack %>
+     </h3><br>
+      <h4><%= project.projectDetails %></h4>
+      <br>   
+      <% var status = project.status %>
+      <% if(status === "UNDER_DEVELOPMENT"){ %>
+        <% status = "UNDER DEVELOPMENT" }%>  
+      <h4>Status : <%= status %></h4>
+      <br><br>
+          </div>
+        </div>
+        <button class="btn-lg btn-danger btn pull-right" disabled>Delete</button>
+      </div>
 
 <%- include  ../partials/footer %>
