@@ -209,6 +209,10 @@ app.get("/users/delete", (req, res)=>{
 
 app.delete("/users/delete",isLoggedIn,(req, res)=>{
     var userId = req.body.users;
+    Team.findOneAndUpdate({ users : { "$all" : ["5c6084a4e760ed3500a69edf"]} },{ "$pullAll": { users: ["5c6084a4e760ed3500a69edf"] }},(err, team)=>{
+       
+    });
+
     User.findByIdAndRemove(userId, function(err){
         if(err){
  
