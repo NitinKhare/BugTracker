@@ -29,6 +29,7 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
+                        <th>Bug</th>
                         <th>Project</th>
                         <th>Status</th>
                         <th>Date Created</th>
@@ -41,7 +42,7 @@
                 </thead>
                 
                 <tbody>
-               
+                        <% var i = 1;%>
                         <% bugs.forEach(function(bugs){ %>
                             <% if (bugs.status === "OPEN"){ %>
                         <% var cl = "open-bug" %>
@@ -60,7 +61,7 @@
                         
                         <tr class="<%= cl %>">
                         
-                           
+                        <td><%= i %></td>   
                         <td ><a style="text-decoration:none; color : #000;" href="/bugs/<%= bugs._id %>"><%= bugs.projectName%></a></td>
 
                         <td><a style="text-decoration:none; color : #000;" href="/bugs/<%= bugs.status %>/"><%= bugs.status %></a></td> 
@@ -82,7 +83,7 @@
                         <td><%= bugs.dateSolved %></td>
                     </tr>
              
-       
+                    <% i++ %>
                     <% }); %>
                 </tbody>
             </table>

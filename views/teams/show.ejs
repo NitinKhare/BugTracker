@@ -1,5 +1,10 @@
 <%- include ../partials/header %>
-
+<script>
+function conf()
+{
+var con=confirm("Deleting the team will delete all User associations with this team and any work assigned to this team will be lost. Proceed Anyway ?");
+}
+</script>
 
 <div class="no-background">
 <div class="container-fluid">
@@ -14,7 +19,7 @@
         <li><a href="#section3"> Date Created : <%= teams.dateCreated %> </a></li>
       </ul><br>
       <form action="/teams/<%= teams.id %>/delete?_method=DELETE" method="POST">
-        <button class="btn btn-lg btn-danger" type="submit">Delete Team</button>
+        <button class="btn btn-lg btn-danger" onClick="conf()" type="submit">Delete Team</button>
       </form>
     </div>
 

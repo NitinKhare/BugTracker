@@ -6,7 +6,8 @@ var WorkSchema = new mongoose.Schema({
     Bug: { type: mongoose.Schema.Types.ObjectId, ref: 'Bts' },
     Project: { type: mongoose.Schema.Types.ObjectId, ref: 'Project' },
     dateCreated: String,
-    dueDate: String
+    dueDate: String,
+    description: String
 
 });
 

@@ -18,6 +18,7 @@
     <table class="table table-bordered">
         <thead>
           <tr>
+            <th scope="col">User</th>
             <th scope="col">User ID</th>
             <th scope="col">Team Assigned</th>
             <th scope="col">Name</th>
@@ -27,7 +28,7 @@
           </tr>
         </thead>
         <tbody>
-                
+                <% var i = 1 ;%>
                 <% user.forEach(function(user){ %>
                   <% var team = "NO";%>
                   <% var cls="not-assigned";%>
@@ -36,17 +37,18 @@
                   <% cls = "assigned" }%>
 
           <tr class="<%= cls %>">
-
-                <td><%= user.id %></a></td>
-                <td><%= team %></a></td>
-                <td><%= user.FullName %></td>
-                <td><%= user.username %></td>
-                <td><%= user.email %></td>
-                <td><%= user.mNumber %></a></td>
+              <td><%= i %></a></td>
+                <td><a style="text-decoration:none; color : #000;" href="/user/<%= user._id %>"><%= user.id %></a></td>
+                <td><a style="text-decoration:none; color : #000;" href="/user/<%= user._id %>"><%= team %></a></td>
+                <td><a style="text-decoration:none; color : #000;" href="/user/<%= user._id %>"><%= user.FullName %></a></td>
+                <td><a style="text-decoration:none; color : #000;" href="/user/<%= user._id %>"><%= user.username %></a></td>
+                <td><a style="text-decoration:none; color : #000;" href="/user/<%= user._id %>"><%= user.email %></a></td>
+                <td><a style="text-decoration:none; color : #000;" href="/user/<%= user._id %>"><%= user.mNumber %></a></td>
                <!-- Field to be added to user schema
                 <td><%= user.dateCreated %></a></td> -->
           
           </tr>
+          <% i++ ;%>
           <% }); %>
           </tbody>
     

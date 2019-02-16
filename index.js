@@ -60,7 +60,9 @@ function todayDate(){
         if (mm < 10) {
           mm = '0' + mm;
         }
-        
+//         const monthNames = ["January", "February", "March", "April", "May", "June",
+//   "July", "August", "September", "October", "November", "December"
+// ];
         today = mm + '/' + dd + '/' + yyyy;
         return today;
     }
@@ -144,6 +146,7 @@ app.delete("/teams/:id/delete", (req, res)=>{
             });           
         });
     });
+    Work.findOneAndRemove({team: id},function(err){});
     Team.findByIdAndRemove(id, function(err){
         if(err){
             res.redirect("/error");
@@ -170,6 +173,7 @@ app.post("/teams/:id/assignwork",(req,res)=>{
     var teamID = req.params.id;
     Work.create({
         team:teamID,dateCreated:todayDate(),dueDate:""+req.body.dueDate,
+        description:req.body.description
     },(err, work)=>{
         if(err){
             console.log(err);
@@ -210,12 +214,15 @@ app.get("/users/delete", (req, res)=>{
 app.delete("/users/delete",isLoggedIn,(req, res)=>{
     var userId = req.body.users;
     Team.findOneAndUpdate({ users : { "$all" : [userId]} },{ "$pullAll": { users: [userId] }},(err, team)=>{
-       
+        if(err){
+            throw err;
+        }
     });
+
 
     User.findByIdAndRemove(userId, function(err){
         if(err){
- 
+            throw err;
         }else{
          res.redirect("/users");
         }
@@ -223,7 +230,13 @@ app.delete("/users/delete",isLoggedIn,(req, res)=>{
  });
  });
 
+ app.get("/user/:id",isLoggedIn, (req, res)=>{
+    User.findById({id:req.params.id}, (err, user)=>{
+    res.render("user/profile",{user: req.user});
+ });
+ });
 
+ 
 app.get("/bugs",isLoggedIn, (req, res)=>{
      
      Bts.find({}, (err, bugs)=>{
@@ -531,8 +544,8 @@ app.get("/register",(req, res)=>{
 app.post("/register",(req, res)=>{
     var no = 0;
 
-    var newUser = new User({FullName:req.body.name,username: req.body.username,mNumber:req.body.number,
-    email:req.body.email,isAdmin:no, isTeamMember:no
+    var newUser = new User({FullName:req.body.name, username: req.body.username,
+        mNumber:req.body.number, email:req.body.email, isAdmin:no, isTeamMember:no
     });
     User.register(newUser, req.body.password, (err, user)=>{
         if(err){
@@ -565,9 +578,12 @@ app.get("/logout",isLoggedIn, (req, res)=>{
 
 
 app.get("/profile",isLoggedIn, (req, res)=>{
-   
-   res.render("user/profile",{user: req.user});
+    res.redirect("/user/"+req.user._id);
 });
+
+
+
+ 
 
 
 app.get("/projects",isLoggedIn, (req, res)=>{

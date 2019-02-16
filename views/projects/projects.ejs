@@ -29,6 +29,7 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
+                        <th>Project</th>
                         <th>Project Name</th>
                         <th>Status</th>
                         <th>Date Created</th>
@@ -38,7 +39,7 @@
                 </thead>
                 
                 <tbody>
-                        <% var cl ="" %>
+                        <% var cl =""; var i = 1; %>
                         <% Project.forEach(function(projects){ %>
                             <% if (projects.status === "PROPOSED"){ %>
                         <%  cl = "open-bug" %>
@@ -57,8 +58,8 @@
                         
                         <tr class="<%= cl %>">
                         
-                           
-                        <td ><a style="text-decoration:none; color : #000;" href="/"><%= projects.projectName%></a></td>
+                           <td><%= i %></td>
+                        <td ><a style="text-decoration:none; color : rgb(41, 29, 29);" href="/projects/<%= projects._id %>"><%= projects.projectName%></a></td>
 
                         <td><%= projects.status %></td> 
 
@@ -80,7 +81,7 @@
                         
                     </tr>
              
-       
+                    <% i++ ;%>
                     <% }); %>
                 </tbody>
             </table>

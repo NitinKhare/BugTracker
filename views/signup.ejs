@@ -41,12 +41,13 @@
                         <div class="form-group">
                             <input type="password" class="form-input" name="re_password" id="re_password" placeholder="Repeat your password" required/>
                         </div>
+                        <span id='message'></span>
                         <!-- <div class="form-group">
                             <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" title="Manager or customer"/>
                             <label for="agree-term" class="label-agree-term"><span><span></span></span>I agree all statements in  <a href="#" class="term-service">Terms of service</a></label>
                         </div> -->
                         <div class="form-group">
-                            <input type="submit" name="submit" id="submit" class="form-submit" value="Sign up"/>
+                            <button type="submit" name="submit" id="submit" class="form-submit" value="Sign up">SIGN UP</button>
                         </div>
                     </form>
                     <p class="loginhere">
@@ -61,5 +62,21 @@
     <!-- JS -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="js/signup.js"></script>
+    <script>
+ $("#re_password").blur(function() {
+  var user_pass = $("#password").val();
+  var user_pass2 = $("#re_password").val();
+  if (user_pass.length == 0) {
+    alert("please fill password first");
+    $("#submit").prop('disabled',true)//use prop()
+  } else if (user_pass === user_pass2) {
+    $("#submit").prop('disabled',false)//use prop()
+  } else {
+    $("#submit").prop('disabled',true)//use prop()
+    alert("Your password doesn't match");
+  }
+});
+</script>
+
 </body><!-- This templates was made by Colorlib (https://colorlib.com) -->
 </html>

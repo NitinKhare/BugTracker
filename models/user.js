@@ -8,6 +8,7 @@ var UserSchema = new mongoose.Schema({
     email:     String,
     username:  String,
     password:  String,
+    gender: String,
     team: { type: mongoose.Schema.Types.ObjectId, ref: 'Team' },
     isAdmin: Number,
     isTeamMember : Number
