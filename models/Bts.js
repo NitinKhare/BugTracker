@@ -6,6 +6,8 @@ var BtsSchema = new mongoose.Schema({
     status: String,
     dateCreated: String,
     title: String,
+    img: 
+    { data: Buffer, contentType: String },
     description: String,
     dateSolved: String,
     comments:[

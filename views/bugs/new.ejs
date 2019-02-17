@@ -1,44 +1,44 @@
 <%- include  ../partials/header %>
+
+
 <div class="container">
-    <div  class="row">
-        <div class= "text-center">
-    <h1>Submit a New Bug</h1>
-    <p>Be specific in Title and Description Text </p>
-</div>
-<div style="width: 30%; margin: 10px auto">
+    <div class="row">
+        <div class="text-center">
+            <h1>Submit a New Bug</h1>
+            <p>Be specific in Title and Description Text </p>
+        </div>
+        <div style="width: 30%; margin: 10px auto">
 
-<form action="/bugs" method="POST">
-    <div class="form-group">
-            <select class="form-control" name ="pjname">
-                    <% Project.forEach(function(projects){ %>
-                    <option value="<%= projects.projectName %>"><%= projects.projectName %></option>   
-                    <% }); %>
+            <form action="/bugs" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <select class="form-control" name="pjname">
+                        <% Project.forEach(function(projects){ %>
+                        <option value="<%= projects.projectName %>"><%= projects.projectName %></option>
+                        <% }); %>
+                </div>
+
+             
+
+                <div class="form-group">
+                    <input class="form-control" type="text" name="title" placeholder="Enter The Bug Title" required />
+                </div>
+
+
+                <div class="form-group">
+                    <textarea style="white-space: pre-wrap;" class="form-control rounded-0" name="description"
+                        id="exampleFormControlTextarea2" placeholder="Enter the description" rows="7"
+                        required></textarea>
+
+                </div>
+
+
+                <button class="btn btn-lg btn-info btn-block">Submit</button>
+
+                <a class="btn btn-lg btn-default btn-block" href="/bugs">View Existing Bugs</a>
+
+            </form>
+
+        </div>
     </div>
-    
-
-<div class="form-group">
- <input class="form-control" type="text" name="title" placeholder="Enter The Bug Title" required/>
-</div>
-<div class="form-group">
- <textarea style="white-space: pre-wrap;" class="form-control rounded-0" name="description"id="exampleFormControlTextarea2" placeholder="Enter the description" rows="7" required></textarea>
-
-</div>
-<!-- <div class="form-group">
- <select class="form-control" name ="status">
-        <option value="OPEN">OPEN</option>
-        <option value="ASSIGNED">ASSIGNED</option>
-        <option value="CLOSED">CLOSED</option>
-        <option value="RESOLVED">RESOLVED</option>
-    </select>
-</div> -->
- 
- <button class="btn btn-lg btn-info btn-block">Submit</button>
-
- <a class="btn btn-lg btn-default btn-block" href="/bugs">View Existing Bugs</a>
-
-</form>
-
-</div>
-</div>
 </div>
 <%- include ../partials/footer %>

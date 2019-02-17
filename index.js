@@ -231,8 +231,8 @@ app.delete("/users/delete",isLoggedIn,(req, res)=>{
  });
 
  app.get("/user/:id",isLoggedIn, (req, res)=>{
-    User.findById({id:req.params.id}, (err, user)=>{
-    res.render("user/profile",{user: req.user});
+    User.findById(req.params.id, (err, user)=>{
+    res.render("user/profile",{user: user});
  });
  });
 
