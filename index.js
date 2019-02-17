@@ -30,6 +30,10 @@ app.use(methodOverride('_method'));
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use((req, res, next)=>{
+    res.locals.user = req.user;
+    next();
+});
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser())
@@ -38,10 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({extended:true}))
 
 
-app.use((req, res, next)=>{
-    res.locals.user = req.user;
-    next();
-});
+
 
 
 var PORT = 3000;
@@ -231,11 +232,25 @@ app.delete("/users/delete",isLoggedIn,(req, res)=>{
  });
 
  app.get("/user/:id",isLoggedIn, (req, res)=>{
-    User.findById(req.params.id, (err, user)=>{
-    res.render("user/profile",{user: user});
- });
+   
+    User.findById(req.params.id, (err, User)=>{
+    res.render("user/profile",{User: User});
+});
+
  });
 
+ 
+ app.get("/user/:id/edit",isLoggedIn, (req, res)=>{
+     var id = req.user.isAdmin;
+    User.findById(req.params.id, (err, user)=>{
+        if(user.isAdmin === 1 || id === 1){
+    res.render("user/profileEdit",{user: user});
+} else{
+    res.send("You are not Authorized !!!");
+}
+ });
+
+ });
  
 app.get("/bugs",isLoggedIn, (req, res)=>{
      
@@ -243,7 +258,7 @@ app.get("/bugs",isLoggedIn, (req, res)=>{
          if(err){
              console.log(err);
          } else{
-             res.render("bugs/bugs",{bugs:bugs,user: req.user});
+             res.render("bugs/bugs",{bugs:bugs});
          }
      })
 });
@@ -349,14 +364,14 @@ app.get("/bugs/:id/comments/new",isLoggedIn,function(req, res){
             res.redirect("/error"); 
             console.log(err);
         }else{
-            res.render("comments/new",{bug:bug, user: req.user});
+            res.render("comments/new",{bug:bug});
         }
     });
 });
 
 
 app.get("/contact",(req, res)=>{
-    res.render("contact", {user: req.user});
+    res.render("contact");
 });
 
 

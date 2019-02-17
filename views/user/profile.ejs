@@ -104,7 +104,6 @@
 
 
 <div class="container emp-profile">
-    <form method="post">
         <div class="row">
             <div class="col-md-4">
                     
@@ -119,7 +118,7 @@
             <div class="col-md-6">
                 <div class="profile-head">
                             <h5>
-                                <%= user.FullName %>
+                                <%= User.FullName %>
                             </h5>
                             <h6>
                                 Web Developer and Designer
@@ -136,7 +135,7 @@
                 </div>
             </div>
             <div class="col-md-2">
-                <input type="submit" class="profile-edit-btn" name="btnAddMore" value="Edit Profile" disabled/>
+                <a class="btn btn-default profile-edit-btn"href="/user/<%= User.id %>/edit">EDIT</a>
             </div>
         </div>
         <div class="row">
@@ -156,13 +155,13 @@
             </div>
             <div class="col-md-8">
                 <div class="tab-content profile-tab" id="myTabContent">
-                    <div class="tab-pane fade in \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="tab-pane fade in show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label>User Id</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <p><%= user.username %></p>
+                                        <p><%= User.username %></p>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -170,7 +169,7 @@
                                         <label>Name</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <p><%= user.FullName %></p>
+                                        <p><%= User.FullName %></p>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -178,7 +177,7 @@
                                         <label>Email</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <p><%= user.email %></p>
+                                        <p><%= User.email %></p>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -186,7 +185,7 @@
                                         <label>Phone</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <p> <%= user.mNumber %></p>
+                                        <p> <%= User.mNumber %></p>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -249,19 +248,8 @@
                 </div>
             </div>
         </div>
-    </form>           
+              
 </div>
-
-
-
-
-
-
-
-
-
-
-
 
 
 <%- include  ../partials/footer %>
