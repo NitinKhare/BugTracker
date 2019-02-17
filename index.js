@@ -582,10 +582,6 @@ app.get("/profile",isLoggedIn, (req, res)=>{
 });
 
 
-
- 
-
-
 app.get("/projects",isLoggedIn, (req, res)=>{
     Project.find({}, (err, project)=>{
         if(err){

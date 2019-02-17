@@ -44,7 +44,7 @@
             <ul class="nav nav-pills nav-stacked">
                 <li class="active"><a href="#section2"><%= bug.projectName %></a></li>
                 <li><a href="/bugs">View other bugs</a></li>
-                <li><a href="#section3">date</a></li>
+                <li><a href="/bugs/<%= bug.id %>/changestatus">Change Status</a></li>
             </ul><br>
             <form action="/bugs/<%= bug._id %>?_method=DELETE" method="POST">
                 <button class="btn btn-danger btn-lg" type="submit"> Delete</button></form>
