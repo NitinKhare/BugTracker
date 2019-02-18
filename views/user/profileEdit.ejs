@@ -4,14 +4,12 @@
     <div class="row">
         <div class="text-center">
             <h1>Edit the Details for : <strong><%= User.username %></strong></h1>
-            <p>Enter the details carefully </p>
+            <p>Username Assigned can not be changed</p>
         </div>
         <div style="width: 30%; margin: 10px auto">
 
             <form action="/user/<%= User._id %>?_method=PUT" method="POST">
-                <div class="form-group">
-                        <input class="form-control" type="text" name="username" value="<%= User.username %>" disabled required/>
-                    </div> 
+            
                 <div class="form-group">
                     <input class="form-control" type="text" name="FullName" value="<%= User.FullName %>" required/>
                 </div>
@@ -33,11 +31,7 @@
             </form>
             </form>
 
-
             <br>
-            <a class="btn btn-lg btn-default btn-block" href="/bugs">View Existing Bugs</a>
-
-
 
         </div>
     </div>
