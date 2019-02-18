@@ -265,7 +265,7 @@ app.delete("/users/delete",isLoggedIn,(req, res)=>{
             res.redirect("/error");
         }else{
             
-            res.redirect("/users");
+            res.redirect("/user/"+req.params.id);
         }
 });
 });

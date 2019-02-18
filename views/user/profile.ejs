@@ -135,7 +135,7 @@
                 </div>
             </div>
             <div class="col-md-2">
-                <a class="btn btn-default profile-edit-btn"href="/user/<%= User.id %>/edit">EDIT</a>
+                <a class="btn btn-default profile-edit-btn" href="/user/<%= User.id %>/edit">EDIT</a>
             </div>
         </div>
         <div class="row">
@@ -170,6 +170,20 @@
                                     </div>
                                     <div class="col-md-6">
                                         <p><%= User.FullName %></p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Gender</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                           <% if(!User.gender){ %>
+                                                <p><a href= "/user/<%= User.id %>/edit">Please Specify your Gender</a>
+                                                   <% } %>
+                                                   
+                                                    <p><%= User.gender %></p>
+                                                    
+                                                    
                                     </div>
                                 </div>
                                 <div class="row">
