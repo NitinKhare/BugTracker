@@ -686,5 +686,5 @@ app.get('*', (req, res)=>{
 
 
 app.listen(PORT, (req, res)=>{
-    console.log("The server started on Port 3000 go to http://localhost:3000/ ");
+    console.log("The server started on Port 3000 go to http://localhost:3000/ to view the project ");
 });

@@ -5,6 +5,17 @@ function conf()
 var con=confirm("Deleting the team will delete all User associations with this team and any work assigned to this team will be lost. Proceed Anyway ?");
 }
 </script>
+<style>
+hr{ 
+  height: 1px;
+  color: red;
+  background-color: black;
+  border: none;
+}
+.boundary{
+  padding: 2px 15px;
+}
+</style>
 
 <div class="no-background">
 <div class="container-fluid">
@@ -24,17 +35,23 @@ var con=confirm("Deleting the team will delete all User associations with this t
     </div>
 
     <div class="col-sm-9">
-        
-      <div class="row">
+     
+        <% if(teams.workAssigned == "YES"){ %>
+          <div class="container">
         <h3>Work Assigned: <%= teams.workAssigned %></h3>
+        <hr>
         <h5>Project Assigned: <%= work.Project %></h5>
         <h5>Date Assigned(mm-dd-yyyy): <%= work.dateCreated %></h5>
         <h5>Due Date (yyyy-mm-dd): <%= work.dueDate %></h5>
         <h5>Description: <strong><%= work.description %></strong></h5>
-
-
       </div>
+
       
+         
+      <% } %>
+    
+  <br>   
+  <div class="boundary">
 <div class="row">
 
         <h4>Team Members for Team : <strong><%= teams.teamName%></strong></h4>
@@ -79,6 +96,7 @@ var con=confirm("Deleting the team will delete all User associations with this t
                       
     </div>
   </div>
+</div>
 </div>
 </div>
 </div>
