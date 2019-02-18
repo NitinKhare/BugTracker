@@ -195,7 +195,7 @@ app.get("/users",isLoggedIn, (req, res)=>{
         if(err){
             console.log(err);
         } else{
-            res.render("user/users",{user:user});
+            res.render("user/users",{User:user});
         }
     });
     
@@ -244,13 +244,32 @@ app.delete("/users/delete",isLoggedIn,(req, res)=>{
      var id = req.user.isAdmin;
     User.findById(req.params.id, (err, user)=>{
         if(user.isAdmin === 1 || id === 1){
-    res.render("user/profileEdit",{user: user});
+    res.render("user/profileEdit",{User: user});
 } else{
     res.send("You are not Authorized !!!");
 }
  });
 
  });
+
+ app.put("/user/:id",isLoggedIn,(req, res)=>{
+    var FullName = req.body.FullName;
+    var username = req.body.username;
+    var mNumber = req.body.mNumber;
+    var email = req.body.email;
+    var gender = req.body.gender;
+    var UpdatedUser={username: username, FullName:FullName, mNumber:mNumber ,
+        email: email, gender:gender};
+
+    User.findByIdAndUpdate(req.params.id, UpdatedUser,function(err, UpdatedUser){       
+        if(err){
+            res.redirect("/error");
+        }else{
+            res.redirect("/bugs/");
+        }
+});
+});
+
  
 app.get("/bugs",isLoggedIn, (req, res)=>{
      

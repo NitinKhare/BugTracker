@@ -29,21 +29,21 @@
         </thead>
         <tbody>
                 <% var i = 1 ;%>
-                <% user.forEach(function(user){ %>
+                <% User.forEach(function(User){ %>
                   <% var team = "NO";%>
                   <% var cls="not-assigned";%>
-                  <% if(user.isTeamMember === 1){%>
+                  <% if(User.isTeamMember === 1){%>
                   <% team = "YES";%>
                   <% cls = "assigned" }%>
 
           <tr class="<%= cls %>">
               <td><%= i %></a></td>
-                <td><a style="text-decoration:none; color : #000;" href="/user/<%= user.id %>"><%= user.id %></a></td>
-                <td><a style="text-decoration:none; color : #000;" href="/user/<%= user.id %>"><%= team %></a></td>
-                <td><a style="text-decoration:none; color : #000;" href="/user/<%= user.id %>"><%= user.FullName %></a></td>
-                <td><a style="text-decoration:none; color : #000;" href="/user/<%= user.id %>"><%= user.username %></a></td>
-                <td><a style="text-decoration:none; color : #000;" href="/user/<%= user.id %>"><%= user.email %></a></td>
-                <td><a style="text-decoration:none; color : #000;" href="/user/<%= user.id %>"><%= user.mNumber %></a></td>
+                <td><a style="text-decoration:none; color : #000;" href="/user/<%= User.id %>"><%= User.id %></a></td>
+                <td><a style="text-decoration:none; color : #000;" href="/user/<%= User.id %>"><%= team %></a></td>
+                <td><a style="text-decoration:none; color : #000;" href="/user/<%= User.id %>"><%= User.FullName %></a></td>
+                <td><a style="text-decoration:none; color : #000;" href="/user/<%= User.id %>"><%= User.username %></a></td>
+                <td><a style="text-decoration:none; color : #000;" href="/user/<%= User.id %>"><%= User.email %></a></td>
+                <td><a style="text-decoration:none; color : #000;" href="/user/<%= User.id %>"><%= User.mNumber %></a></td>
                <!-- Field to be added to user schema
                 <td><%= user.dateCreated %></a></td> -->
           
