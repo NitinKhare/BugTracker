@@ -132,7 +132,9 @@ app.get("/teams/:id",(req,res)=>{
         if(err){
            res.redirect("/error");
         }else{
-            res.render("teams/show",{teams : teams, User : user});
+            Work.findById(teams.workId,(err, work)=>{
+            res.render("teams/show",{teams : teams, User : user, work: work});
+        });
         }
     });
 });
@@ -174,14 +176,18 @@ app.post("/teams/:id/assignwork",(req,res)=>{
     var teamID = req.params.id;
     Work.create({
         team:teamID,dateCreated:todayDate(),dueDate:""+req.body.dueDate,
-        description:req.body.description
+        description:req.body.description, Project: req.body.pjname
     },(err, work)=>{
         if(err){
             console.log(err);
             res.redirect("/error")
         }else{
            
-            Team.findByIdAndUpdate(teamID,{ "$set": { workAssigned: "YES"}},(err, res)=>{});
+            Team.findByIdAndUpdate(teamID,{ "$set": { workAssigned: "YES", workId: work._id, 
+            projectWork: req.body.pjname
+        
+        }
+        },(err, res)=>{});
             res.redirect("/teams/"+teamID);
         }
     })

@@ -24,6 +24,19 @@ var con=confirm("Deleting the team will delete all User associations with this t
     </div>
 
     <div class="col-sm-9">
+        
+      <div class="row">
+        <h3>Work Assigned: <%= teams.workAssigned %></h3>
+        <h5>Project Assigned: <%= work.Project %></h5>
+        <h5>Date Assigned(mm-dd-yyyy): <%= work.dateCreated %></h5>
+        <h5>Due Date (yyyy-mm-dd): <%= work.dueDate %></h5>
+        <h5>Description: <strong><%= work.description %></strong></h5>
+
+
+      </div>
+      
+<div class="row">
+
         <h4>Team Members for Team : <strong><%= teams.teamName%></strong></h4>
             <table class="table">
                     <thead>
@@ -67,7 +80,7 @@ var con=confirm("Deleting the team will delete all User associations with this t
     </div>
   </div>
 </div>
-
+</div>
 </div>
 
 <%- include ../partials/footer %>

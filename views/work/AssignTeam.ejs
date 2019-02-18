@@ -10,7 +10,7 @@
     <div class="form-group">
             <select class="form-control" name ="pjname">
                     <% Project.forEach(function(projects){ %>
-                    <option value="<%= projects.projectName %>"><%= projects.projectName %></option>   
+                    <option value="<%= projects.id %>"><%= projects.projectName %></option>   
                     <% }); %>
             </select>
     </div>
