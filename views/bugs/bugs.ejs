@@ -70,14 +70,12 @@
 
                         <td><a style="text-decoration:none; color : rgb(0, 0, 0);" href="/bugs/<%= bugs._id %>"><%= bugs.title %></a></td>
 
-                            
+
+                        
                         <% var text = bugs.description %>
                         <% var maxLength = 35 %>
                         <% var trim_text = text.substr(0, maxLength); %>
-                        <% trim_text = trim_text.substr(0, Math.min(trim_text.length, trim_text.lastIndexOf(" ")))
-                        %>
-
-
+                        <% trim_text = trim_text.substr(0, Math.min(trim_text.length, trim_text.lastIndexOf(" "))) %>
 
                         <td><a style="text-decoration:none; color : #000;" href="/bugs/<%= bugs._id %>"><%= trim_text %></a></td>
                         <td><%= bugs.dateSolved %></td>

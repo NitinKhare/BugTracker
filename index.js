@@ -297,39 +297,7 @@ app.post("/user/:id/assignwork", (req, res) => {
 // Adding Image upload logic
 
 //setting storage engine
-const storage = multer.diskStorage({
-    destination: './public/uploads/',
-    filename: function(req, file, cb){
-        cb(null, file.fieldname+"-"+Date.now()+path.extname(file.originalname));
-    }
-});
 
-const upload = multer({
-    storage: storage
-}).single('userDP');
-
-app.get("/user/:id/upload",(req, res)=>{
-    var id = req.params.id;
-    User.findById(id, (err, User)=>{
-    res.render("user/addDp",{User: User});
-});
-});
-
-app.post("/user/:id/upload",(req, res)=>{
-    var id= req.params.id;
-   upload(req, res, (err)=>{
-    if(err){
-        res.render('user/addDp');
-    }else{
-
-        console.log(req.file);
-        res.send('test');
-        User.findById(id, (err, User)=>{
-            
-        });
-    }
-   });
-});
 
 // end of image upload logic
 
@@ -394,6 +362,7 @@ app.post("/bugs", isLoggedIn, (req, res) => {
             if (err) {
                 console.log(err);
             } else {
+                console.log(bts);
                 res.redirect("/bugs");
             }
         }
@@ -681,7 +650,7 @@ app.post("/register", (req, res) => {
 
     var newUser = new User({
         FullName: req.body.name, username: req.body.username,
-        mNumber: req.body.number, email: req.body.email, isAdmin: no, isTeamMember: no
+        mNumber: req.body.number, email: req.body.email, isAdmin: no, isTeamMember: no,workAssigned: "No"
     });
     User.register(newUser, req.body.password, (err, user) => {
         if (err) {

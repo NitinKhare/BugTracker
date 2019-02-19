@@ -2,14 +2,14 @@
 <style>
 .assigned { background-color: rgb(0, 255, 21); }
 .not-assigned { background-color: rgb(255, 0, 0); }  
+.workassigned { background-color: rgb(255,140,0); }  
+.teamWorkAssigned { background-color: rgb(0,128,0); }  
 </style>
 
 <div class="container">
     <header class="jumbotron">
         <div class="container">
                 <h1>All Registered Users</h1>
-
-
             <p>
                 <a class="btn btn-danger btn-lg" href="/users/delete">Delete a User</a>
             </p>
@@ -25,6 +25,7 @@
             <th scope="col">Username</th>
             <th scope="col">E-MAIL</th>
             <th scope="col">Contact Number</th>
+            <th scope="col">Work Assigned</th>
           </tr>
         </thead>
         <tbody>
@@ -34,8 +35,14 @@
                   <% var cls="not-assigned";%>
                   <% if(User.isTeamMember === 1){%>
                   <% team = "YES";%>
-                  <% cls = "assigned" }%>
-
+                  <% cls = "assigned"; %>
+                  <% } %>
+                  <% if(User.workAssigned){ %>
+                    <% cls = "workassigned" %>
+                    <% } %>
+                    <% if(User.workAssigned && User.isTeamMember === 1){ %>
+                      <% cls = "teamWorkAssigned" %>
+                      <% } %>
           <tr class="<%= cls %>">
               <td><%= i %></a></td>
                 <td><a style="text-decoration:none; color : #000;" href="/user/<%= User.id %>"><%= User.id %></a></td>
@@ -44,6 +51,11 @@
                 <td><a style="text-decoration:none; color : #000;" href="/user/<%= User.id %>"><%= User.username %></a></td>
                 <td><a style="text-decoration:none; color : #000;" href="/user/<%= User.id %>"><%= User.email %></a></td>
                 <td><a style="text-decoration:none; color : #000;" href="/user/<%= User.id %>"><%= User.mNumber %></a></td>
+                <% if(!User.workAssigned){ %>
+                  <td><a style="text-decoration:none; color : #000;" href="/user/<%= User.id %>/assignwork">NO</a></td>
+                  <% }else{ %>
+                    <td><a style="text-decoration:none; color : #000;" href="/user/<%= User.id %>">Yes</a></td>
+                    <% } %>
                <!-- Field to be added to user schema
                 <td><%= user.dateCreated %></a></td> -->
           
