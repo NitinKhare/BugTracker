@@ -14,23 +14,25 @@ var expressSession = require("express-session");
 var path = require("path");
 var Contact = require("./models/contact");
 var Team = require('./models/teams');
+var mkdirp = require('mkdirp');
+var multer = require('multer');
 
 
-mongoose.connect("mongodb://localhost/btsCopy",{ useNewUrlParser: true });
+mongoose.connect("mongodb://localhost/btsCopy", { useNewUrlParser: true });
 
 app.set("view engine", "ejs");
 
 app.use(expressSession({
-   secret: "I hope to finish this project before deadline" ,
-   resave: false,
-   saveUninitialized: false
+    secret: "I hope to finish this project before deadline",
+    resave: false,
+    saveUninitialized: false
 }));
 
 app.use(methodOverride('_method'));
 
 app.use(passport.initialize());
 app.use(passport.session());
-app.use((req, res, next)=>{
+app.use((req, res, next) => {
     res.locals.user = req.user;
     next();
 });
@@ -39,156 +41,154 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser())
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.urlencoded({extended:true}))
-
-
-
-
+app.use(bodyParser.urlencoded({ extended: true }))
 
 var PORT = 3000;
 
 
-function todayDate(){
+function todayDate() {
     var today = new Date();
-        var dd = today.getDate();
-        var mm = today.getMonth() + 1; 
-        var yyyy = today.getFullYear();
-        
-        if (dd < 10) {
-          dd = '0' + dd;
-        }
-        
-        if (mm < 10) {
-          mm = '0' + mm;
-        }
-//         const monthNames = ["January", "February", "March", "April", "May", "June",
-//   "July", "August", "September", "October", "November", "December"
-// ];
-        today = mm + '/' + dd + '/' + yyyy;
-        return today;
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1;
+    var yyyy = today.getFullYear();
+
+    if (dd < 10) {
+        dd = '0' + dd;
     }
 
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+    //         const monthNames = ["January", "February", "March", "April", "May", "June",
+    //   "July", "August", "September", "October", "November", "December"
+    // ];
+    today = mm + '/' + dd + '/' + yyyy;
+    return today;
+}
 
-app.get("/", (req, res)=>{
-    if(req.user){
+
+app.get("/", (req, res) => {
+    if (req.user) {
         res.redirect("/bugs");
-    }else{
-    res.render("landing");
+    } else {
+        res.render("landing");
     }
 });
 
 
-app.get("/docs", (req, res)=>{
+app.get("/docs", (req, res) => {
     res.render("docs");
 });
 
-app.get("/createteam", (req, res)=>{
-    User.find({}, (err, user)=>{
-        if(err){
+app.get("/createteam", (req, res) => {
+    User.find({}, (err, user) => {
+        if (err) {
             console.log(err);
-        } else{
-            res.render("teams/createTeam",{User: user});
+        } else {
+            res.render("teams/createTeam", { User: user });
         }
     });
 });
 
-app.post("/createteam", (req, res)=>{
+app.post("/createteam", (req, res) => {
     var teamName = req.body.teamname;
     var dateCreated = todayDate();
     var workAssigned = "NO";
-    var teamMembers= req.body.users;
+    var teamMembers = req.body.users;
     Team.create({
-            teamName: teamName, dateCreated:dateCreated, workAssigned:workAssigned
-     },(err, team)=>{
-        if(err){
+        teamName: teamName, dateCreated: dateCreated, workAssigned: workAssigned
+    }, (err, team) => {
+        if (err) {
             res.redirect("/error");
         }
-            for(var i=0;i < teamMembers.length;i++){
-                var teamMember = teamMembers[i];
-            User.findOneAndUpdate({username: teamMember},{isTeamMember: 1, team: team},(err, user)=>{
-                Team.findByIdAndUpdate( team._id,{ "$push": { users: user }},(err, res)=>{
-                    
+        for (var i = 0; i < teamMembers.length; i++) {
+            var teamMember = teamMembers[i];
+            User.findOneAndUpdate({ username: teamMember }, { isTeamMember: 1, team: team }, (err, user) => {
+                Team.findByIdAndUpdate(team._id, { "$push": { users: user } }, (err, res) => {
+
                 });
             });
-        }       
-    });    
-res.redirect("/teams");
+        }
+    });
+    res.redirect("/teams");
 });
 
-app.get("/teams",(req,res)=>{
-    Team.find({}, (err, teams)=>{
-        if(err){
+app.get("/teams", (req, res) => {
+    Team.find({}, (err, teams) => {
+        if (err) {
             console.log(err);
-        } else{
-            res.render("teams/teams",{teams: teams});
-        }
-    });    
-    
-});
-
-app.get("/teams/:id",(req,res)=>{
-    User.find({},(err,user)=>{
-    Team.findById((req.params.id),(err, teams)=>{
-        if(err){
-           res.redirect("/error");
-        }else{
-            Work.findById(teams.workId,(err, work)=>{
-            res.render("teams/show",{teams : teams, User : user, work: work});
-        });
+        } else {
+            res.render("teams/teams", { teams: teams });
         }
     });
+
 });
+
+app.get("/teams/:id", (req, res) => {
+    User.find({}, (err, user) => {
+        Team.findById((req.params.id), (err, teams) => {
+            if (err) {
+                res.redirect("/error");
+            } else {
+                Work.findById(teams.workId, (err, work) => {
+                    res.render("teams/show", { teams: teams, User: user, work: work });
+                });
+            }
+        });
+    });
 });
 
 
-app.delete("/teams/:id/delete", (req, res)=>{
+app.delete("/teams/:id/delete", (req, res) => {
     var id = req.params.id;
-    Team.findById(id, (err, team)=>{
-        team.users.forEach(function(userId){
-                User.findByIdAndUpdate( userId,{ "$set": { isTeamMember: 0 , team: null}},(err, res)=>{
-            });           
+    Team.findById(id, (err, team) => {
+        team.users.forEach(function (userId) {
+            User.findByIdAndUpdate(userId, { "$set": { isTeamMember: 0, team: null } }, (err, res) => {
+            });
         });
     });
-    Work.findOneAndRemove({team: id},function(err){});
-    Team.findByIdAndRemove(id, function(err){
-        if(err){
+    Work.findOneAndRemove({ team: id }, function (err) { });
+    Team.findByIdAndRemove(id, function (err) {
+        if (err) {
             res.redirect("/error");
-        }else{
+        } else {
             res.redirect("/teams");
         }
     });
 });
 
 
-app.get("/teams/:id/assignwork",(req,res)=>{
-    Team.findById(req.params.id, (err, team)=>{
-        if(err){
+app.get("/teams/:id/assignwork", (req, res) => {
+    Team.findById(req.params.id, (err, team) => {
+        if (err) {
             res.redirect("/error");
-        }else{
-            Project.find({}, (err, project)=>{
-            res.render("work/AssignTeam",{team:team, Project:project});
-        });
-    }
+        } else {
+            Project.find({}, (err, project) => {
+                res.render("work/AssignTeam", { team: team, Project: project });
+            });
+        }
     });
 });
 
-app.post("/teams/:id/assignwork",(req,res)=>{
+app.post("/teams/:id/assignwork", (req, res) => {
     var teamID = req.params.id;
     Work.create({
-        team:teamID,dateCreated:todayDate(),dueDate:""+req.body.dueDate,
-        description:req.body.description, Project: req.body.pjname
-    },(err, work)=>{
-        if(err){
+        team: teamID, dateCreated: todayDate(), dueDate: "" + req.body.dueDate,
+        description: req.body.description, Project: req.body.pjname
+    }, (err, work) => {
+        if (err) {
             console.log(err);
             res.redirect("/error")
-        }else{
-           
-            Team.findByIdAndUpdate(teamID,{ "$set": { workAssigned: "YES", workId: work._id, 
-            projectWork: req.body.pjname
-        
-        }
-        },(err, res)=>{});
-            res.redirect("/teams/"+teamID);
+        } else {
+
+            Team.findByIdAndUpdate(teamID, {
+                "$set": {
+                    workAssigned: "YES", workId: work._id,
+                    projectWork: req.body.pjname
+
+                }
+            }, (err, res) => { });
+            res.redirect("/teams/" + teamID);
         }
     })
 
@@ -196,100 +196,191 @@ app.post("/teams/:id/assignwork",(req,res)=>{
 
 
 
-app.get("/users",isLoggedIn, (req, res)=>{
-    User.find({}, (err, user)=>{
-        if(err){
+app.get("/users", isLoggedIn, (req, res) => {
+    User.find({}, (err, user) => {
+        if (err) {
             console.log(err);
-        } else{
-            res.render("user/users",{User:user});
+        } else {
+            res.render("user/users", { User: user });
         }
     });
-    
+
 });
 
-app.get("/users/delete", (req, res)=>{
-    User.find({}, (err, user)=>{
-        if(err){
+app.get("/users/delete", (req, res) => {
+    User.find({}, (err, user) => {
+        if (err) {
             console.log(err);
-        } else{
-            res.render("user/deleteUsers",{User:user});
+        } else {
+            res.render("user/deleteUsers", { User: user });
         }
     });
-    
+
 });
 
-app.delete("/users/delete",isLoggedIn,(req, res)=>{
+app.delete("/users/delete", isLoggedIn, (req, res) => {
     var userId = req.body.users;
-    Team.findOneAndUpdate({ users : { "$all" : [userId]} },{ "$pullAll": { users: [userId] }},(err, team)=>{
-        if(err){
+    Team.findOneAndUpdate({ users: { "$all": [userId] } }, { "$pullAll": { users: [userId] } }, (err, team) => {
+        if (err) {
             throw err;
         }
     });
 
 
-    User.findByIdAndRemove(userId, function(err){
-        if(err){
+    User.findByIdAndRemove(userId, function (err) {
+        if (err) {
             throw err;
-        }else{
-         res.redirect("/users");
+        } else {
+            res.redirect("/users");
         }
-    
- });
- });
 
- app.get("/user/:id",isLoggedIn, (req, res)=>{
-   
-    User.findById(req.params.id, (err, User)=>{
-    res.render("user/profile",{User: User});
+    });
 });
 
- });
+app.get("/user/:id", isLoggedIn, (req, res) => {
 
- 
- app.get("/user/:id/edit",isLoggedIn, (req, res)=>{
-     var id = req.user._id;
-    User.findById(req.params.id, (err, User)=>{
-        if(req.user.isAdmin == 1 || id == req.params.id){
-    res.render("user/profileEdit",{User: User});
-} else{
-    res.send("You are not Authorized !!!");
-}
- });
+    User.findById(req.params.id, (err, User) => {
+        res.render("user/profile", { User: User });
+    });
+});
 
- });
 
- app.put("/user/:id",isLoggedIn,(req, res)=>{
+app.get("/user/:id/assignwork", (req, res) => {
+    User.findById(req.params.id, (err, User) => {
+        if (err) {
+            res.redirect("/error");
+        } else {
+            Bts.find({}, (err, bugs) => {
+                res.render("work/AssignUser", { User: User, Bug: bugs });
+            });
+        }
+    });
+});
+
+
+
+app.post("/user/:id/assignwork", (req, res) => {
+    var userID = req.params.id;
+    Work.create({
+        user: userID, dateCreated: todayDate(), dueDate: "" + req.body.dueDate,
+        description: req.body.description, Bug: req.body.bugName
+    }, (err, work) => {
+        if (err) {
+            console.log(err);
+            res.redirect("/error");
+        } else {
+            Bts.findByIdAndUpdate(work.Bug,{
+                "$set": {
+                    status: "ASSIGNED",
+                    userAssigned : work.user
+                }  
+            },(err, res) => { });
+            User.findByIdAndUpdate(userID, {
+                "$set": {
+                    workAssigned: "YES", 
+                    workId: work._id
+                }
+            }, (err, res) => { });
+            res.redirect("/user/" + work.user);
+        }
+    })
+
+});
+
+
+
+
+
+
+
+
+// Adding Image upload logic
+
+//setting storage engine
+const storage = multer.diskStorage({
+    destination: './public/uploads/',
+    filename: function(req, file, cb){
+        cb(null, file.fieldname+"-"+Date.now()+path.extname(file.originalname));
+    }
+});
+
+const upload = multer({
+    storage: storage
+}).single('userDP');
+
+app.get("/user/:id/upload",(req, res)=>{
+    var id = req.params.id;
+    User.findById(id, (err, User)=>{
+    res.render("user/addDp",{User: User});
+});
+});
+
+app.post("/user/:id/upload",(req, res)=>{
+    var id= req.params.id;
+   upload(req, res, (err)=>{
+    if(err){
+        res.render('user/addDp');
+    }else{
+
+        console.log(req.file);
+        res.send('test');
+        User.findById(id, (err, User)=>{
+            
+        });
+    }
+   });
+});
+
+// end of image upload logic
+
+
+
+app.get("/user/:id/edit", isLoggedIn, (req, res) => {
+    var id = req.user._id;
+    User.findById(req.params.id, (err, User) => {
+        if (req.user.isAdmin == 1 || id == req.params.id) {
+            res.render("user/profileEdit", { User: User });
+        } else {
+            res.send("You are not Authorized !!!");
+        }
+    });
+
+});
+
+app.put("/user/:id", isLoggedIn, (req, res) => {
     var FullName = req.body.FullName;
     var mNumber = req.body.mNumber;
     var email = req.body.email;
     var gender = req.body.gender;
-    var UpdatedUser={FullName:FullName, mNumber:mNumber ,
-        email: email, gender: gender};
+    var UpdatedUser = {
+        FullName: FullName, mNumber: mNumber,
+        email: email, gender: gender
+    };
 
-    User.findByIdAndUpdate(req.params.id, UpdatedUser,function(err, UpdatedUser){       
-        if(err){
+    User.findByIdAndUpdate(req.params.id, UpdatedUser, function (err, UpdatedUser) {
+        if (err) {
             res.redirect("/error");
-        }else{
-            
-            res.redirect("/user/"+req.params.id);
+        } else {
+
+            res.redirect("/user/" + req.params.id);
         }
-});
-});
-
- 
-app.get("/bugs",isLoggedIn, (req, res)=>{
-     
-     Bts.find({}, (err, bugs)=>{
-         if(err){
-             console.log(err);
-         } else{
-             res.render("bugs/bugs",{bugs:bugs});
-         }
-     })
+    });
 });
 
 
-app.post("/bugs",isLoggedIn,(req, res)=>{
+app.get("/bugs", isLoggedIn, (req, res) => {
+
+    Bts.find({}, (err, bugs) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.render("bugs/bugs", { bugs: bugs });
+        }
+    })
+});
+
+
+app.post("/bugs", isLoggedIn, (req, res) => {
     var projectName = req.body.pjname;
     var status = "OPEN";
     var title = req.body.title;
@@ -298,184 +389,184 @@ app.post("/bugs",isLoggedIn,(req, res)=>{
 
     Bts.create(
 
-        {projectName:projectName, status:status,dateCreated:today ,title: title, description:description},
-        function(err, bts){
-                if(err){
-                    console.log(err);
-                }else{
-                    res.redirect("/bugs");           
-                 }
+        { projectName: projectName, status: status, dateCreated: today, title: title, description: description },
+        function (err, bts) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.redirect("/bugs");
+            }
         }
-     );
+    );
 });
 
 
-app.get("/bugs/new",isLoggedIn, (req, res)=>{
-    Project.find({}, (err, project)=>{
-        if(err){
+app.get("/bugs/new", isLoggedIn, (req, res) => {
+    Project.find({}, (err, project) => {
+        if (err) {
             console.log(err);
-        } else{
-            res.render("bugs/new.ejs",{Project:project});
+        } else {
+            res.render("bugs/new.ejs", { Project: project });
         }
     });
 });
 
 
-app.get("/bugs/resolved",isLoggedIn, (req, res)=>{
-    Bts.find({status: 'RESOLVED'}, (err, bugs)=>{
-        if(err){
+app.get("/bugs/resolved", isLoggedIn, (req, res) => {
+    Bts.find({ status: 'RESOLVED' }, (err, bugs) => {
+        if (err) {
             console.log(err);
-        } else{
-            res.render("bugs/resolved",{bugs:bugs});
-        }
-    });  
-});
-
-
-app.get("/bugs/closed",isLoggedIn, (req, res)=>{
-    Bts.find({status: 'CLOSED'}, (err, bugs)=>{
-        if(err){
-            console.log(err);
-        } else{
-            res.render("bugs/closed",{bugs:bugs});
+        } else {
+            res.render("bugs/resolved", { bugs: bugs });
         }
     });
 });
 
 
-app.get("/bugs/assigned",isLoggedIn, (req, res)=>{
-    Bts.find({status: 'ASSIGNED'}, (err, bugs)=>{
-        if(err){
+app.get("/bugs/closed", isLoggedIn, (req, res) => {
+    Bts.find({ status: 'CLOSED' }, (err, bugs) => {
+        if (err) {
             console.log(err);
-        } else{
-            res.render("bugs/assigned",{bugs:bugs});
-        }
-    });   
-});
-
-
-app.get("/bugs/open",isLoggedIn, (req, res)=>{
-
-    Bts.find({status: 'OPEN'}, (err, bugs)=>{
-        if(err){
-            console.log(err);
-        } else{
-            res.render("bugs/open",{bugs:bugs});
-        }
-    }); 
-});
-
-
-app.get("/bugs/:id",isLoggedIn, (req, res)=>{
-    Bts.findById(req.params.id).populate("comments").exec((err, Foundbug)=>{
-        if(err){
-            console.log(err);
-        }else{
-            res.render("bugs/show",{bug : Foundbug});
+        } else {
+            res.render("bugs/closed", { bugs: bugs });
         }
     });
 });
 
 
-app.get("/error", (req, res)=>{
+app.get("/bugs/assigned", isLoggedIn, (req, res) => {
+    Bts.find({ status: 'ASSIGNED' }, (err, bugs) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.render("bugs/assigned", { bugs: bugs });
+        }
+    });
+});
+
+
+app.get("/bugs/open", isLoggedIn, (req, res) => {
+
+    Bts.find({ status: 'OPEN' }, (err, bugs) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.render("bugs/open", { bugs: bugs });
+        }
+    });
+});
+
+
+app.get("/bugs/:id", isLoggedIn, (req, res) => {
+    Bts.findById(req.params.id).populate("comments").exec((err, Foundbug) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.render("bugs/show", { bug: Foundbug });
+        }
+    });
+});
+
+
+app.get("/error", (req, res) => {
     res.render("error");
 })
 
 
-app.get("/bugs/:id/comments/new",isLoggedIn,function(req, res){
+app.get("/bugs/:id/comments/new", isLoggedIn, function (req, res) {
 
-    Bts.findById(req.params.id, (err, bug)=>{
-        if(err){
-            res.redirect("/error"); 
+    Bts.findById(req.params.id, (err, bug) => {
+        if (err) {
+            res.redirect("/error");
             console.log(err);
-        }else{
-            res.render("comments/new",{bug:bug});
+        } else {
+            res.render("comments/new", { bug: bug });
         }
     });
 });
 
 
-app.get("/contact",(req, res)=>{
+app.get("/contact", (req, res) => {
     res.render("contact");
 });
 
 
-app.post("/contact",(req, res)=>{
+app.post("/contact", (req, res) => {
     var name = req.body.name;
     var email = req.body.email;
     var subject = req.body.subject;
     var message = req.body.message;
-    var dateOfContact = todayDate();  
+    var dateOfContact = todayDate();
 
     Contact.create({
-       name: name, email: email, subject: subject,
-       message: message,
-       dateOfContact: dateOfContact 
-    }, (err, contact)=>{
-        if(err){
+        name: name, email: email, subject: subject,
+        message: message,
+        dateOfContact: dateOfContact
+    }, (err, contact) => {
+        if (err) {
             res.render("/error");
-        }else{
+        } else {
             res.redirect("/bugs");
         }
-    });    
+    });
 });
 
 
-app.get("/contacts",(req, res)=>{
-    Contact.find({}, (err, contact)=>{
-        if(err){
+app.get("/contacts", (req, res) => {
+    Contact.find({}, (err, contact) => {
+        if (err) {
             res.render("/error");
             console.log(err);
-        } else{
-            res.render("ContactMessages/contacts",{contact: contact })      
+        } else {
+            res.render("ContactMessages/contacts", { contact: contact })
         }
-    });   
+    });
 });
 
 
-app.get("/contacts/:id",(req, res)=>{
-    Contact.findById(req.params.id,(err, FoundMessage)=>{
-        if(err){
+app.get("/contacts/:id", (req, res) => {
+    Contact.findById(req.params.id, (err, FoundMessage) => {
+        if (err) {
             console.log(err);
-        }else{
-            res.render("ContactMessages/show",{message : FoundMessage});
+        } else {
+            res.render("ContactMessages/show", { message: FoundMessage });
         }
-    });  
+    });
 });
 
 
-app.delete("/contacts/:id",isLoggedIn,(req, res)=>{
-    Contact.findByIdAndRemove(req.params.id, function(err){
-        if(err){
- 
-        }else{
-         res.redirect("/contacts");
+app.delete("/contacts/:id", isLoggedIn, (req, res) => {
+    Contact.findByIdAndRemove(req.params.id, function (err) {
+        if (err) {
+
+        } else {
+            res.redirect("/contacts");
         }
-    
- });
- });
+
+    });
+});
 
 
-app.post("/bugs/:id/comments",isLoggedIn,(req, res)=>{
-    Bts.findById(req.params.id, (err, bug)=>{
-        if(err){
+app.post("/bugs/:id/comments", isLoggedIn, (req, res) => {
+    Bts.findById(req.params.id, (err, bug) => {
+        if (err) {
             console.log(err);
             res.redirect("/error");
-        }else{
+        } else {
             var author = req.body.author;
             console.log(author);
-            if(author == undefined){
+            if (author == undefined) {
                 author = req.user.username;
             }
             console.log(author);
             var comment = req.body.comment;
-            Comment.create({text:comment, author:author},(err, comment)=>{
-                if(err){
+            Comment.create({ text: comment, author: author }, (err, comment) => {
+                if (err) {
                     console.log(err)
-                }else{
+                } else {
                     bug.comments.push(comment);
                     bug.save();
-                    res.redirect("/bugs/"+bug._id);
+                    res.redirect("/bugs/" + bug._id);
                 }
             });
         }
@@ -483,208 +574,217 @@ app.post("/bugs/:id/comments",isLoggedIn,(req, res)=>{
 });
 
 
-app.get("/bugs/:id/edit",isLoggedIn,(req, res)=>{
-    Bts.findById(req.params.id, (err, bug)=>{
-        if(err){
-            res.redirect("/error"); 
+app.get("/bugs/:id/edit", isLoggedIn, (req, res) => {
+    Bts.findById(req.params.id, (err, bug) => {
+        if (err) {
+            res.redirect("/error");
             console.log(err);
-        }else{
-            res.render("bugs/edit",{bug:bug});
+        } else {
+            res.render("bugs/edit", { bug: bug });
         }
     });
 });
 
 
-app.get("/bugs/:id/changeStatus",isLoggedIn,(req, res)=>{
+app.get("/bugs/:id/changeStatus", isLoggedIn, (req, res) => {
 
-    Bts.findById(req.params.id, (err, bug)=>{
-        if(err){
-            res.redirect("/error"); 
+    Bts.findById(req.params.id, (err, bug) => {
+        if (err) {
+            res.redirect("/error");
             console.log(err);
-        }else{
-            res.render("bugs/changeStatus",{bug:bug});
+        } else {
+            res.render("bugs/changeStatus", { bug: bug });
         }
     });
 
 });
 
 
-app.put("/bugs/:id",isLoggedIn,(req, res)=>{
+app.put("/bugs/:id", isLoggedIn, (req, res) => {
     var projectName = req.body.pjname;
     var status = req.body.status;
     var title = req.body.title;
     var description = req.body.description;
     var today = todayDate();
-    var dateSolved ="";
+    var dateSolved = "";
     var status = req.body.status;
-    if(status =="CLOSED" || status == "RESOLVED" ){
+    if (status == "CLOSED" || status == "RESOLVED") {
         dateSolved = todayDate();
     }
-    var UpdatedBug={projectName:projectName, status:status,dateCreated:today ,
-        title: title, description:description,dateSolved:dateSolved};
+    var UpdatedBug = {
+        projectName: projectName, status: status, dateCreated: today,
+        title: title, description: description, dateSolved: dateSolved
+    };
 
-    Bts.findByIdAndUpdate(req.params.id, UpdatedBug,function(err, UpdatedBug){       
-        if(err){
+    Bts.findByIdAndUpdate(req.params.id, UpdatedBug, function (err, UpdatedBug) {
+        if (err) {
             res.redirect("/error");
-        }else{
+        } else {
             res.redirect("/bugs/");
         }
-});
+    });
 });
 
 
-app.put("/bugs/:id/changestatus",isLoggedIn,(req, res)=>{
-   var dateSolved ="";
+app.put("/bugs/:id/changestatus", isLoggedIn, (req, res) => {
+    var dateSolved = "";
     var status = req.body.status;
-    if(status =="CLOSED" || status == "RESOLVED" ){
+    if (status == "CLOSED" || status == "RESOLVED") {
         dateSolved = todayDate();
     }
-    Bts.findById(req.params.id, (err, bug)=>{
-        if(err){
-            res.redirect("/error"); 
+    Bts.findById(req.params.id, (err, bug) => {
+        if (err) {
+            res.redirect("/error");
             console.log(err);
-        }else{
-            var UpdatedBug={projectName:bug.projectName, status:status,dateCreated:todayDate() ,
-                title: bug.title, description:bug.description, dateSolved: dateSolved};
-                Bts.findByIdAndUpdate(req.params.id, UpdatedBug,function(err, UpdatedBug){
-       
-                    if(err){
-                        res.redirect("/error");
-                    }else{
-                        res.redirect("/bugs/");
-                    }
+        } else {
+            var UpdatedBug = {
+                projectName: bug.projectName, status: status, dateCreated: todayDate(),
+                title: bug.title, description: bug.description, dateSolved: dateSolved
+            };
+            Bts.findByIdAndUpdate(req.params.id, UpdatedBug, function (err, UpdatedBug) {
+
+                if (err) {
+                    res.redirect("/error");
+                } else {
+                    res.redirect("/bugs/");
+                }
             });
-       }
+        }
     });
 });
 
 
-app.delete("/bugs/:id",isLoggedIn,(req, res)=>{
-   Bts.findByIdAndRemove(req.params.id, function(err){
-       if(err){
+app.delete("/bugs/:id", isLoggedIn, (req, res) => {
+    Bts.findByIdAndRemove(req.params.id, function (err) {
+        if (err) {
 
-       }else{
-        res.redirect("/bugs");
-       }
-   
+        } else {
+            res.redirect("/bugs");
+        }
+
+    });
 });
-});
 
 
-app.get("/signup",(req, res)=>{
+app.get("/signup", (req, res) => {
     res.render("signup");
 });
 
 
-app.get("/register",(req, res)=>{
+app.get("/register", (req, res) => {
     res.render("signup");
 });
 
 
-app.post("/register",(req, res)=>{
+app.post("/register", (req, res) => {
     var no = 0;
 
-    var newUser = new User({FullName:req.body.name, username: req.body.username,
-        mNumber:req.body.number, email:req.body.email, isAdmin:no, isTeamMember:no
+    var newUser = new User({
+        FullName: req.body.name, username: req.body.username,
+        mNumber: req.body.number, email: req.body.email, isAdmin: no, isTeamMember: no
     });
-    User.register(newUser, req.body.password, (err, user)=>{
-        if(err){
+    User.register(newUser, req.body.password, (err, user) => {
+        if (err) {
             console.log(err.name);
             return res.render("signup");
         }
-        passport.authenticate("local")(req, res, ()=>{
+        passport.authenticate("local")(req, res, () => {
             res.redirect("/bugs");
         })
     })
 });
 
 
-app.get("/login", (req, res)=>{
+app.get("/login", (req, res) => {
     res.render("landing");
 });
 
 
-app.post("/login",passport.authenticate("local",{successRedirect: "/bugs",
-failureRedirect:"/login"}), 
-(req, res)=>{console.log("Logged In")});
+app.post("/login", passport.authenticate("local", {
+    successRedirect: "/bugs",
+    failureRedirect: "/login"
+}),
+    (req, res) => { console.log("Logged In") });
 
 
-app.get("/logout",isLoggedIn, (req, res)=>{
+app.get("/logout", isLoggedIn, (req, res) => {
     req.session.destroy(function (err) {
-        res.redirect('/bugs'); 
-      }); 
-    
+        res.redirect('/bugs');
+    });
+
 });
 
 
-app.get("/profile",isLoggedIn, (req, res)=>{
-    res.redirect("/user/"+req.user._id);
+app.get("/profile", isLoggedIn, (req, res) => {
+    res.redirect("/user/" + req.user._id);
 });
 
 
-app.get("/projects",isLoggedIn, (req, res)=>{
-    Project.find({}, (err, project)=>{
-        if(err){
+app.get("/projects", isLoggedIn, (req, res) => {
+    Project.find({}, (err, project) => {
+        if (err) {
             console.log(err);
-        } else{
-            res.render("projects/projects",{Project:project});
+        } else {
+            res.render("projects/projects", { Project: project });
         }
     })
 });
 
 
-app.get("/projects/new", isLoggedIn, (req, res)=>{
+app.get("/projects/new", isLoggedIn, (req, res) => {
     res.render("projects/new");
- });
-
-
- app.post("/projects",isLoggedIn, (req, res)=>{
-   
-            var projectName = req.body.pjname;
-            var techStack = req.body.techStack;
-            var projectDetails = req.body.description;
-            var status = req.body.status;
-            var dateAdded = todayDate();
-
-            Project.create({projectName:projectName, techStack:techStack,projectDetails:projectDetails,
-                 status:status, dateAdded:dateAdded},(err, comment)=>{
-                if(err){
-                    console.log(err)
-                }else{
-                    
-                    res.redirect("/projects");
-                }
-            });
-        
-    });
-
-
-app.get("/projects/:id",isLoggedIn, (req, res)=>{
-    var id = req.params.id;
-    Project.findById({_id:id},(err, project)=>{
-        if(err){
-         res.redirect("/error");
-        }else{
-            res.render("projects/show",{project : project});
-        }
-    });
-    
 });
 
 
-function isLoggedIn(req, res, next){
-    if(req.isAuthenticated()){
+app.post("/projects", isLoggedIn, (req, res) => {
+
+    var projectName = req.body.pjname;
+    var techStack = req.body.techStack;
+    var projectDetails = req.body.description;
+    var status = req.body.status;
+    var dateAdded = todayDate();
+
+    Project.create({
+        projectName: projectName, techStack: techStack, projectDetails: projectDetails,
+        status: status, dateAdded: dateAdded
+    }, (err, comment) => {
+        if (err) {
+            console.log(err)
+        } else {
+
+            res.redirect("/projects");
+        }
+    });
+
+});
+
+
+app.get("/projects/:id", isLoggedIn, (req, res) => {
+    var id = req.params.id;
+    Project.findById({ _id: id }, (err, project) => {
+        if (err) {
+            res.redirect("/error");
+        } else {
+            res.render("projects/show", { project: project });
+        }
+    });
+
+});
+
+
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
         return next();
     }
     res.redirect("/login");
 }
 
 
-app.get('*', (req, res)=>{
+app.get('*', (req, res) => {
     res.render("error");
 });
 
 
-app.listen(PORT, (req, res)=>{
+app.listen(PORT, (req, res) => {
     console.log("The server started on Port 3000 go to http://localhost:3000/ to view the project ");
 });

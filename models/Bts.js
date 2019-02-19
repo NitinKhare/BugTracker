@@ -10,6 +10,7 @@ var BtsSchema = new mongoose.Schema({
     { data: Buffer, contentType: String },
     description: String,
     dateSolved: String,
+    userAssigned :{ type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     comments:[
         {
             type: mongoose.Schema.Types.ObjectId,

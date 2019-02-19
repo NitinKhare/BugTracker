@@ -9,6 +9,8 @@ var UserSchema = new mongoose.Schema({
     username:  String,
     password:  String,
     gender: String,
+    workAssigned: String,
+    workId : { type: mongoose.Schema.Types.ObjectId, ref: 'Work' },
     team: { type: mongoose.Schema.Types.ObjectId, ref: 'Team' },
     isAdmin: Number,
     isTeamMember : Number
