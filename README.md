@@ -25,3 +25,5 @@ profile page Template:
 https://bootsnipp.com/snippets/K0ZmK
 
 (Also a few colorlib template used)
+
+<h1><strong>Didn't complete as I had to built another project </string> </h1>
