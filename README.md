@@ -26,4 +26,4 @@ https://bootsnipp.com/snippets/K0ZmK
 
 (Also a few colorlib template used)
 
-<h1><strong>Didn't complete as I had to built another project for Major project </string> </h1>
+<h1><strong>Didn't complete as I had to build a different project for Major project </string> </h1>
